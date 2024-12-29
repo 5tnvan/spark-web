@@ -145,7 +145,7 @@ const Login: NextPage = () => {
         </div>
 
         </div>
-        <Link href="/sparkapp" className="flex flex-row mt-3 ml-3 px-3 py-2 h-fit font-semibold justify-center items-center w-fit rounded-xl border border-neutral-500 text-xs transform transition-transform duration-300 hover:-translate-y-2">
+        <Link href="/sparqapp" className="flex flex-row mt-3 ml-3 px-3 py-2 h-fit font-semibold justify-center items-center w-fit rounded-xl border border-neutral-500 text-xs transform transition-transform duration-300 hover:-translate-y-2">
           <div className="mr-2 flex flex-row justify-center items-center">
             <Image
               src={`/spark/spark-logo.png`}

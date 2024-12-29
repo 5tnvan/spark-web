@@ -16,6 +16,7 @@ import { useIdeasFeed } from "~~/hooks/wildfire/useIdeaFeeds";
 import { useShortsFeed } from "~~/hooks/wildfire/useShortsFeed";
 import { Bars } from "react-loader-spinner";
 import { useKins } from "~~/hooks/wildfire/useKins";
+import { Chip } from "@nextui-org/react";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -284,7 +285,7 @@ const Home: NextPage = () => {
         <div className="profile flex flex-row justify-center items-center gap-2">
 
           {/* COMMUNITY */}
-          <div className="stats shadow flex flex-col grow w-full h-full py-5 mb-2">
+          <div className="stats shadow flex flex-col grow w-full h-full py-5 mb-2 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700">
             <div className="flex flex-row justify-between items-center stat-value text-sm lg:text-lg px-5 mt-2"><span>Community</span>
               <span onClick={() => refetchKins()} className="cursor-pointer"><ArrowPathIcon width={15} height={15} /></span>
             </div>
@@ -311,15 +312,15 @@ const Home: NextPage = () => {
           </div>
 
           {/* WHATS HAPENNING */}
-          <div className="stats shadow flex flex-col grow w-full h-full py-5 mb-2">
+          <div className="stats shadow flex flex-col grow w-full h-full py-5 mb-2 text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400">
             <div className="flex flex-row justify-between items-center stat-value text-sm lg:text-lg px-5 mt-2">
               <span className="line-clamp-1 overflow-hidden text-ellipsis">What's happening</span>
               <span onClick={() => refetchTags()} className="cursor-pointer"><ArrowPathIcon width={15} height={15} /></span>
             </div>
             {tagsFeed && tagsFeed.map((tag: any, index: number) => (
-              <div key={index} className="flex flex-row items-center justify-between stat cursor-pointer hover:opacity-85 py-2">
+              <div key={index} className="flex flex-row items-center justify-between stat cursor-pointer hover:opacity-85 py-1">
                 <div className="text-primary text-sm lg:text-base font-bold line-clamp-1 overflow-hidden text-ellipsis">
-                  #{tag.tag_name}
+                  <Chip color="primary">#{tag.tag_name}</Chip>
                 </div>
                 <div className="stat-desc"><FormatNumber number={Math.floor(Math.random() * (1800 - 756 + 1)) + 756} /></div>
               </div>
@@ -327,7 +328,7 @@ const Home: NextPage = () => {
           </div>
 
           {/* TRENDING */}
-          <div className="stats shadow hidden md:flex flex-col grow w-full h-full py-5 mb-2">
+          <div className="stats shadow hidden md:flex flex-col grow w-full h-full py-5 mb-2 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700">
             <div className="flex flex-row justify-between items-center stat-value text-sm lg:text-lg px-5 mt-2">
               <span className="line-clamp-1 overflow-hidden text-ellipsis">Trending</span>
               <span onClick={() => refetchVideos2()} className="cursor-pointer">

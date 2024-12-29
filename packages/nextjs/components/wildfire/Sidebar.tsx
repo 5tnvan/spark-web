@@ -53,7 +53,7 @@ export const Sidebar = () => {
 
           <Link href="/">
             <Image
-              src={`/spark/spark-text-logo.png`}
+              src={`/spark/sparq-logo-text.png`}
               alt="hero"
               height={120}
               width={120}
@@ -63,28 +63,41 @@ export const Sidebar = () => {
             />
           </Link>
           <div className="flex flex-row gap-1">
-          <div
-            className="p-3 rounded-full bg-base-100"
-            onClick={() => {
-              if (isAuthenticated) {
+            {isAuthenticated ? 
+            <>
+            <div
+              className="p-3 rounded-full bg-base-100"
+              onClick={() => {
                 setIdeaModalOpen(true);
-              } else {
-                router.push("/login");
-              }
-              closeMenu();
-            }}
-          >
-            <SparklesIcon width={15} />
-          </div>
-          <Link href="/create" className="p-3 rounded-full bg-base-100" onClick={closeMenu}>
-            <VideoCameraIcon width={15} />
-          </Link>
+                closeMenu();
+              }}
+            >
+              <SparklesIcon width={15} />
+            </div>
+            <Link href="/create" className="p-3 rounded-full bg-base-100" onClick={closeMenu}>
+                  <VideoCameraIcon width={15} />
+                </Link>
+            </>
+             :
+              <><Link href="/login"
+                className="p-3 rounded-full bg-base-100"
+              >
+                <SparklesIcon width={15} />
+              </Link>
+                <Link href="/login" className="p-3 rounded-full bg-base-100" onClick={closeMenu}>
+                  <VideoCameraIcon width={15} />
+                </Link>
+              </>}
+          
+          
           </div>
           
         </div>
         {isMenuOpen && (
           <div id="auth-ui-sidebar-md" className="w-full text-base-content">
             <div className="grow menu">
+              {isAuthenticated ? 
+              <>
               <ul className="text-sm py-2" onClick={closeMenu}>
                 <li>
                   <Link href="/home" className="flex flex-row gap-4">
@@ -154,19 +167,79 @@ export const Sidebar = () => {
                   </Link>
                 </li>
               </ul>
-              <Link href="/sparkapp" className="flex flex-row mt-3 ml-3 px-3 py-2 h-fit font-semibold justify-center items-center w-fit rounded-xl border border-neutral-500 text-xs transform transition-transform duration-300 hover:-translate-y-2">
-                <div className="mr-2 flex flex-row justify-center items-center">
-                  <Image
-                    src={`/spark/spark-logo.png`}
-                    alt="spark logo"
-                    height={120}
-                    width={120}
-                    className="w-4 h-auto"
-                    draggable={false}
-                  />
-                </div>
-                Support Spark
-              </Link>
+              
+              </> : 
+              <>
+              <ul className="text-sm py-2" onClick={closeMenu}>
+                <li>
+                  <Link href="/home" className="flex flex-row gap-4">
+                    <HomeIcon width={23} /> Home
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/login" className="flex flex-row gap-4">
+                    <Square2StackIcon width={23} /> Feed
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/sparks" className="flex flex-row gap-4">
+                    <SparklesIcon width={23} /> Sparks
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/shorts" className="flex flex-row gap-4">
+                    <DevicePhoneMobileIcon width={23} /> Shorts
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/videos" className="flex flex-row gap-4">
+                    <VideoCameraIcon width={23} /> Videos
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/login" className="flex flex-row gap-4">
+                    <UserGroupIcon width={23} />
+                    Community
+                  </Link>
+                </li>
+              </ul>
+              <div className="font-semibold mt-3 ml-3 text-primary">Watch</div>
+              <ul className="py-2">
+                <li>
+                  <Link href="/videos" className="flex flex-row gap-2 font-semibold text-sm">
+                    <FireIcon width={23} /> What's happening
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/videos" className="flex flex-row gap-4 text-sm">
+                    <NewspaperIcon width={23} /> News
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/videos" className="flex flex-row gap-4 text-sm">
+                    <FaceSmileIcon width={23} /> Humour
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/videos" className="flex flex-row gap-4 text-sm">
+                    <LightBulbIcon width={23} />
+                    Learning
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/videos" className="flex flex-row gap-4 text-sm">
+                    <ChatBubbleLeftEllipsisIcon width={23} />
+                    Conversations
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/videos" className="flex flex-row gap-4 text-sm">
+                    <CircleStackIcon width={23} />
+                    Finance
+                  </Link>
+                </li>
+              </ul>
+              </> }
               <Link href="/sparkarevolution" className="flex flex-row mt-3 ml-3 px-3 py-2 h-fit font-semibold justify-center items-center w-fit rounded-xl border border-neutral-500 text-xs transform transition-transform duration-300 hover:-translate-y-2">
                 <div className="mr-2 flex flex-row justify-center items-center">
                   <Image
@@ -179,6 +252,19 @@ export const Sidebar = () => {
                   />
                 </div>
                 Spark a revolution
+              </Link>
+              <Link href="/sparqapp" className="flex flex-row mt-3 ml-3 px-3 py-2 h-fit font-semibold justify-center items-center w-fit rounded-xl border border-neutral-500 text-xs transform transition-transform duration-300 hover:-translate-y-2">
+                <div className="mr-2 flex flex-row justify-center items-center">
+                  <Image
+                    src={`/spark/spark-logo.png`}
+                    alt="spark logo"
+                    height={120}
+                    width={120}
+                    className="w-4 h-auto"
+                    draggable={false}
+                  />
+                </div>
+                About SparQ
               </Link>
             </div>
             <div onClick={closeMenu}>
@@ -195,7 +281,7 @@ export const Sidebar = () => {
         <div className="grow menu">
           <Link href="/">
             <Image
-              src={`/spark/spark-text-logo.png`}
+              src={`/spark/sparq-logo-text.png`}
               alt="hero"
               height={300}
               width={300}
@@ -204,6 +290,8 @@ export const Sidebar = () => {
               style={{ width: "100px", height: "auto" }}
             />
           </Link>
+          {isAuthenticated ? 
+          <>
           <ul className="text-sm py-2">
             <li>
               <Link href="/home" className="flex flex-row gap-4">
@@ -237,6 +325,43 @@ export const Sidebar = () => {
               </Link>
             </li>
           </ul>
+          </> : 
+          <>
+          <ul className="text-sm py-2">
+            <li>
+              <Link href="/home" className="flex flex-row gap-4">
+                <HomeIcon width={23} /> Home
+              </Link>
+            </li>
+            <li>
+              <Link href="/login" className="flex flex-row gap-4">
+                <Square2StackIcon width={23} /> Feed
+              </Link>
+            </li>
+            <li>
+              <Link href="/sparks" className="flex flex-row gap-4">
+                <SparklesIcon width={23} /> Sparks
+              </Link>
+            </li>
+            <li>
+              <Link href="/shorts" className="flex flex-row gap-4">
+                <DevicePhoneMobileIcon width={23} /> Shorts
+              </Link>
+            </li>
+            <li>
+              <Link href="/videos" className="flex flex-row gap-4">
+                <VideoCameraIcon width={23} /> Videos
+              </Link>
+            </li>
+            <li>
+              <Link href="/login" className="flex flex-row gap-4">
+                <UserGroupIcon width={23} />
+                Community
+              </Link>
+            </li>
+          </ul>
+          </>}
+          
           <div className="font-semibold mt-3 ml-3 text-primary">Watch</div>
           <ul className="py-2">
             <li>
@@ -273,19 +398,6 @@ export const Sidebar = () => {
               </Link>
             </li>
           </ul>
-          <Link href="/sparkapp" className="flex flex-row mt-3 ml-3 px-3 py-2 h-fit font-semibold justify-center items-center w-fit rounded-xl border border-neutral-500 text-xs transform transition-transform duration-300 hover:-translate-y-2">
-            <div className="mr-2 flex flex-row justify-center items-center">
-              <Image
-                src={`/spark/spark-logo.png`}
-                alt="spark logo"
-                height={120}
-                width={120}
-                className="w-4 h-auto"
-                draggable={false}
-              />
-            </div>
-            Support Spark
-          </Link>
           <Link href="/sparkarevolution" className="flex flex-row mt-3 ml-3 px-3 py-2 h-fit font-semibold justify-center items-center w-fit rounded-xl border border-neutral-500 text-xs transform transition-transform duration-300 hover:-translate-y-2">
                 <div className="mr-2 flex flex-row justify-center items-center">
                   <Image
@@ -299,18 +411,60 @@ export const Sidebar = () => {
                 </div>
                 Spark a revolution
               </Link>
+              <Link href="/sparqapp" className="flex flex-row mt-3 ml-3 px-3 py-2 h-fit font-semibold justify-center items-center w-fit rounded-xl border border-neutral-500 text-xs transform transition-transform duration-300 hover:-translate-y-2">
+            <div className="mr-2 flex flex-row justify-center items-center">
+              <Image
+                src={`/spark/spark-logo.png`}
+                alt="spark logo"
+                height={120}
+                width={120}
+                className="w-4 h-auto"
+                draggable={false}
+              />
+            </div>
+            About SparQ
+          </Link>
         </div>
 
         <div className="absolute bottom-2 w-full px-4">
           <div className="flex flex-col">
-            <Link href="/create" className="btn btn-neutral">
-              <span>Create</span>
-              <VideoCameraIcon width={20} />
-            </Link>
-            <div className="btn btn-primary mt-1" onClick={isAuthenticated ? () => setIdeaModalOpen(true) : () => router.push("/login")}>
-              <span>Spark Idea</span>
-              <SparklesIcon width={20} />
-            </div>
+            {
+              isAuthenticated ?
+              <>
+                  <Link
+                    href="/create"
+                    className="cursor-pointer flex flex-row items-center justify-between text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    <div></div>
+                    <span>Create</span>
+                    <VideoCameraIcon width={20} className="" />
+                  </Link>
+                  <div
+                    className="cursor-pointer flex flex-row justify-between gap-2 rounded-xl mt-1 text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium text-sm px-5 py-2.5 text-center mb-2"
+                    onClick={() => setIdeaModalOpen(true)}>
+                    <div></div>
+                    <span>Spark Idea</span>
+                    <SparklesIcon width={20} />
+                  </div>
+                </> :
+                <>
+                  <Link
+                    href="/login"
+                    className="cursor-pointer flex flex-row items-center justify-between text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    <div></div>
+                    <span>Create</span>
+                    <VideoCameraIcon width={20} className="" />
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="cursor-pointer flex flex-row justify-between gap-2 rounded-xl mt-1 text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium text-sm px-5 py-2.5 text-center  mb-2"
+                    >
+                    <div></div>
+                    <span>Spark Idea</span>
+                    <SparklesIcon width={20} />
+                  </Link>
+                </>
+            }
+            
           </div>
           <div className="pointer-events-none flex flex-row justify-center p-1">
             <SwitchTheme className={`pointer-events-auto`} />

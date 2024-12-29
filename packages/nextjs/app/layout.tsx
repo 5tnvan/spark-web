@@ -7,6 +7,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
 import { fetchShort } from "~~/utils/wildfire/fetch/fetch3Sec";
+import { NextUIProvider } from "@nextui-org/react";
 
 /**
  * SE-2 APP LAYOUT
@@ -39,9 +40,11 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
       )}
       <body>
         <ThemeProvider>
+        <NextUIProvider>
           <ScaffoldEthAppWithProviders>
             <SparkApp>{children}</SparkApp>
           </ScaffoldEthAppWithProviders>
+          </NextUIProvider>
         </ThemeProvider>
       </body>
     </html>

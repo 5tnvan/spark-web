@@ -79,7 +79,7 @@ const Landing: NextPage = () => {
 
   const words2 = [
     {
-      text: "Become a media creator, today.",
+      text: "Become a super creator, today.",
       className: "text-primary dark:text-primary",
     },
   ];

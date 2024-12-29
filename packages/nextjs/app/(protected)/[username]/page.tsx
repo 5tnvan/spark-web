@@ -25,6 +25,7 @@ import { calculateSum } from "~~/utils/wildfire/calculateSum";
 import { convertEthToUsd } from "~~/utils/wildfire/convertEthToUsd";
 import { deleteFollow, insertFollow } from "~~/utils/wildfire/crud/followers";
 import { Avatar } from "~~/components/Avatar";
+import { Snippet } from "@nextui-org/react";
 
 const Profile: NextPage = () => {
   const { username } = useParams();
@@ -66,6 +67,8 @@ const Profile: NextPage = () => {
     fetchMore: fetchMoreIdeas,
   } = useUserIdeaFeedByUsername(username, 6);
   const incomingRes = useIncomingTransactions(posterProfile?.wallet_id);
+
+  console.log("posterProfile", posterProfile);
 
   //BALANCE
   const ethSum = calculateSum(incomingRes.ethereumData);
@@ -399,7 +402,7 @@ const Profile: NextPage = () => {
               </div>
               <div className="px-5 my-2">
                 {isAuthenticated == false && (
-                  <Link href="/login" className="btn bg-base-200 w-full relative">
+                  <Link href="/login" className="btn btn-sm bg-base-200 w-full relative">
                     Connect
                     <UserPlusIcon width={23} className="absolute right-3 opacity-65" />
                   </Link>
@@ -425,31 +428,40 @@ const Profile: NextPage = () => {
             </div>
 
             {/* USERNAME */}
-            <div className="stats shadow flex flex-col items-center justify-center grow w-full h-48 max-w-sm py-5 mb-2">
-              <Link href={"/" + username} className="stat cursor-pointer hover:opacity-85">
-                <div className="stat-figure text-secondary">
+            <div className="stats shadow flex flex-col items-center justify-center grow w-full max-w-sm py-5 mb-2 text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium text-sm">
+              <div className="stat flex flex-row justify-between cursor-pointer hover:opacity-85">
+                <div>
+                  <div className="flex flex-row gap-1 items-center">
+                    <span>{levelName}</span>
+                    {levelName == "Spark" && <CheckBadgeIcon width={20} height={20} className="text-primary" />}
+                  </div>
+                  <Link href={"/" + username} className="font-bold text-xl">{posterProfile?.username}</Link>
+                </div>
+                <div className="text-secondary">
                   {posterProfile?.avatar_url && (
-                    <div className="avatar placeholder">
+                    <div className="avatar placeholder cursor-default">
                       <div className="w-12 rounded-full">
                         <Image src={posterProfile?.avatar_url} alt={""} width={80} height={80} />
                       </div>
                     </div>
                   )}
                   {!posterProfile?.avatar_url && (
-                    <div className="avatar placeholder">
+                    <div className="avatar placeholder cursor-default">
                       <div className="bg-neutral text-neutral-content rounded-full w-12">
                         <span className="text-xl">{posterProfile?.username.charAt(0).toUpperCase()}</span>
                       </div>
                     </div>
                   )}
                 </div>
-                <div className="stat-title flex flex-row gap-1 items-center">
-                  <span>{levelName}</span>
-                  {levelName == "Spark" && <CheckBadgeIcon width={20} height={20} className="text-primary" />}
-                </div>
-                <div className="stat-value text-xl">{posterProfile?.username}</div>
-                {/* <div className="stat-desc">Level up</div> */}
-              </Link>
+              </div>
+              <div className="flex flex-col items-start w-full px-6">
+                {posterProfile?.bio && <div className="text-sm font-normal opacity-80 mb-2 ">
+                    {posterProfile.bio}
+                  </div>}
+              
+                <Snippet color="primary">{`sprq.social/${posterProfile.username}`}</Snippet>
+              </div>
+              
             </div>
 
             {/* SEND LOVE */}

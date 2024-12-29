@@ -26,7 +26,7 @@ export const Header = () => {
       <div className="navbar-start w-full justify-between">
         <Link href="/" className="flex flex-row w-full">
           <Image
-            src={`/spark/spark-text-logo.png`}
+            src={`/spark/sparq-logo-text.png`}
             alt="hero"
             height={50}
             width={50}
