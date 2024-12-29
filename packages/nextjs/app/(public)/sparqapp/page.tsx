@@ -56,7 +56,7 @@ const Landing: NextPage = () => {
                             pathLengthThird,
                             pathLengthFourth,
                             pathLengthFifth,
-                        ]} title={"Open media, powered by you."} description={"Ad-Free. Censorship-Free. Peer-to-peer donations."} className={""} />
+                        ]} title={"Open social, powered by you."} description={"Ad-Free. Censorship-Free. Peer-to-peer monetization."} className={""} />
                 </div>
 
                 {/* BLOCK */}

@@ -16,10 +16,8 @@ import { HomeIcon, LightBulbIcon, SparklesIcon } from "@heroicons/react/24/solid
 import { Bars3Icon, FaceSmileIcon, FireIcon, NewspaperIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { AuthContext, AuthUserContext } from "~~/app/context";
 import { SwitchTheme } from "~~/components/wildfire/SwitchTheme";
-import { useRouter } from "next/navigation";
 
 export const Sidebar = () => {
-  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAuthenticated } = useContext(AuthContext);
 
