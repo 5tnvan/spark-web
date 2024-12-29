@@ -285,7 +285,7 @@ const Home: NextPage = () => {
         <div className="profile flex flex-row justify-center items-center gap-2">
 
           {/* COMMUNITY */}
-          <div className="stats shadow flex flex-col grow w-full h-full py-5 mb-2 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700">
+          <div className="stats shadow flex flex-col grow w-full h-full py-5 mb-2 text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700">
             <div className="flex flex-row justify-between items-center stat-value text-sm lg:text-lg px-5 mt-2"><span>Community</span>
               <span onClick={() => refetchKins()} className="cursor-pointer"><ArrowPathIcon width={15} height={15} /></span>
             </div>
@@ -303,7 +303,7 @@ const Home: NextPage = () => {
                   />
                 </div>}
               {kinsFeed.map((kin: any, index: any) => (
-                <Link href={`/${kin.username}`} className="btn btn-sm text-sm" key={index}>
+                <Link href={`/${kin.username}`} className="btn btn-sm bg-neutral-100 text-neutral-800 text-sm border-0" key={index}>
                   <div><Avatar profile={kin} width={5} height={5} /></div>
                   <span className="hidden lg:flex">@{kin.username}</span>
                 </Link>
@@ -328,7 +328,7 @@ const Home: NextPage = () => {
           </div>
 
           {/* TRENDING */}
-          <div className="stats shadow hidden md:flex flex-col grow w-full h-full py-5 mb-2 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700">
+          <div className="stats shadow hidden md:flex flex-col grow w-full h-full py-5 mb-2 text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700">
             <div className="flex flex-row justify-between items-center stat-value text-sm lg:text-lg px-5 mt-2">
               <span className="line-clamp-1 overflow-hidden text-ellipsis">Trending</span>
               <span onClick={() => refetchVideos2()} className="cursor-pointer">
