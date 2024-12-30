@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { NextPage } from "next";
 import { ArrowDownCircleIcon, ArrowPathIcon, DevicePhoneMobileIcon, EyeIcon, SparklesIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
@@ -16,7 +15,7 @@ import { useIdeasFeed } from "~~/hooks/wildfire/useIdeaFeeds";
 import { useShortsFeed } from "~~/hooks/wildfire/useShortsFeed";
 import { Bars } from "react-loader-spinner";
 import { useKins } from "~~/hooks/wildfire/useKins";
-import { Chip } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader, Chip, Code, Divider, Link } from "@nextui-org/react";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -49,15 +48,20 @@ const Home: NextPage = () => {
           .map((part, index) => {
             if (part.startsWith("#")) {
               return (
-                <div key={`hash-${i}-${index}`} className="text-primary">
-                  {part}
-                </div>
+                <Code key={`hash-${i}-${index}`} className="text-blue-500 hover:opacity-80">
+                {part}</Code>
+                
               );
             } else if (part.startsWith("@")) {
               return (
-                <div key={`mention-${i}-${index}`} className="text-primary" onClick={() => router.push(`/${part.substring(1)}`)}>
+                <Code
+                  key={`mention-${i}-${index}`}
+                  color="warning"
+                  onClick={() => router.push(`/${part.substring(1)}`)}
+                  className="cursor-pointer hover:opacity-80"
+                >
                   {part}
-                </div>
+                </Code>
               );
             } else {
               // Wrap plain text in a span with a key
@@ -70,25 +74,28 @@ const Home: NextPage = () => {
       </div>
     ));
   };
+  
 
   const renderActiveTabContent = () => {
     switch (activeTab) {
       case "sparks":
         return (
           <div className="mr-2 mb-1">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 p-2">
               {ideasFeed.map((idea, index) => (
-                <div
-                  key={index}
-                  className="relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl shadow-2xl p-6 text-white h-full transform transition-transform duration-300 hover:-translate-y-2"
-                >
-                  {/* Background overlay */}
-                  <div className="absolute top-0 left-0 w-full h-full bg-white opacity-10 transform -skew-x-12"></div>
-
-                  {/* Card content */}
-                  <Link className="relative z-10 flex flex-col h-full" href={`/spark/${idea.id}`}>
-                    {/* Logo */}
-                    <div className="mb-4">
+                <>
+                  <Card className="" key={index}>
+                    <CardHeader className="flex flex-row items-center justify-between gap-3">
+                      <div className="flex flex-row items-center space-x-2">
+                        <Avatar profile={idea.profile} width={10} height={10} />
+                        <Link href={`/${idea.profile.username}`} color="foreground" className="text-sm font-bold">
+                          @{idea.profile.username}
+                        </Link>
+                        <span className="text-xs text-gray-300">
+                          <TimeAgo timestamp={idea.created_at} />
+                        </span>
+                      </div>
+                      <div className="">
                       <Image
                         src={`/spark/spark-logo.png`}
                         alt="spark logo"
@@ -98,28 +105,23 @@ const Home: NextPage = () => {
                         draggable={false}
                       />
                     </div>
-
-                    {/* Tweet text */}
-                    <div className="line-clamp-5 text-lg text-opacity-90 mb-4">{formatText(idea.text)}</div>
-
-                    {/* Footer */}
-                    <div className="mt-auto flex flex-row items-center justify-between ">
-                      <div className="flex flex-row items-center space-x-2">
-                        <Avatar profile={idea.profile} width={10} height={10} />
-                        <div className="text-sm">
-                          @{idea.profile.username}
-                        </div>
-                        <span className="text-xs text-gray-300">
-                          <TimeAgo timestamp={idea.created_at} />
-                        </span>
-                      </div>
-                      <span className="flex flex-row items-center gap-1 text-xs text-gray-100">
+                    </CardHeader>
+                    <Divider />
+                    <CardBody>
+                    <div className="text-base text-opacity- mb-4">{formatText(idea.text)}</div>
+                    </CardBody>
+                    <Divider />
+                    <CardFooter className="flex flex-row justify-between">
+                    <span className="flex flex-row items-center gap-1 text-sm">
                         <EyeIcon width={18} height={18} />
                         <FormatNumber number={idea.idea_views[0].view_count} />
                       </span>
-                    </div>
-                  </Link>
-                </div>
+                      <Link color="foreground" showAnchorIcon href={`/spark/${idea.id}`} className="text-sm text-blue-500">
+                        View spark
+                      </Link>
+                    </CardFooter>
+                  </Card></>
+                
               ))}
             </div>
 
@@ -303,7 +305,7 @@ const Home: NextPage = () => {
                   />
                 </div>}
               {kinsFeed.map((kin: any, index: any) => (
-                <Link href={`/${kin.username}`} className="btn btn-sm bg-neutral-100 text-neutral-800 text-sm border-0" key={index}>
+                <Link href={`/${kin.username}`} className="btn btn-sm bg-neutral-100 hover:bg-white text-neutral-800 text-sm border-0" key={index}>
                   <div><Avatar profile={kin} width={5} height={5} /></div>
                   <span className="hidden lg:flex">@{kin.username}</span>
                 </Link>
@@ -322,7 +324,7 @@ const Home: NextPage = () => {
                 <div className="text-primary text-sm lg:text-base font-bold line-clamp-1 overflow-hidden text-ellipsis">
                   <Chip color="primary">#{tag.tag_name}</Chip>
                 </div>
-                <div className="stat-desc"><FormatNumber number={Math.floor(Math.random() * (1800 - 756 + 1)) + 756} /></div>
+                <div className="stat-desc text-neutral-800 hidden lg:block"><FormatNumber number={Math.floor(Math.random() * (1800 - 756 + 1)) + 756} /></div>
               </div>
             ))}
           </div>

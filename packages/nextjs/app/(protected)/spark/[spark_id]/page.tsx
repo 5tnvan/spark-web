@@ -3,7 +3,6 @@
 import { useContext, useEffect, useState } from "react";
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { NextPage } from "next";
 import ConfettiExplosion from "react-confetti-explosion";
@@ -21,6 +20,8 @@ import {
   FireIcon,
   UserIcon,
   UserPlusIcon,
+  CheckBadgeIcon,
+  HandThumbUpIcon
 } from "@heroicons/react/24/solid";
 import { AuthContext, AuthUserContext, AuthUserFollowsContext } from "~~/app/context";
 import { Avatar } from "~~/components/Avatar";
@@ -37,6 +38,7 @@ import { insertComment } from "~~/utils/wildfire/crud/idea_comments";
 import { insertLike } from "~~/utils/wildfire/crud/idea_fires";
 import { insertReply } from "~~/utils/wildfire/crud/idea_replies";
 import { incrementSparkViews } from "~~/utils/wildfire/incrementSparkViews";
+import { Button, Card, CardBody, CardFooter, CardHeader, Code, Divider, Link, Snippet } from "@nextui-org/react";
 
 const Video: NextPage = () => {
   const router = useRouter();
@@ -91,13 +93,12 @@ const Video: NextPage = () => {
       }, 3000);
     } else {
       const error = await insertLike(idea_id, type);
+      handleConfetti(type);
       if (!error) {
         // Add points based on the reaction fields
         if (type == "fire") setTempFire(true);
         if (type == "spark") setTempSpark(true);
         if (type == "supernova") setTempSupernova(true);
-
-        handleConfetti(type);
       }
     }
   };
@@ -226,15 +227,20 @@ const Video: NextPage = () => {
           .map((part, index) => {
             if (part.startsWith("#")) {
               return (
-                <div key={`hash-${i}-${index}`} className="text-primary">
-                  {part}
-                </div>
+                <Code key={`hash-${i}-${index}`} className="text-blue-500 hover:opacity-80">
+                  {part}</Code>
+
               );
             } else if (part.startsWith("@")) {
               return (
-                <div key={`mention-${i}-${index}`} className="text-primary" onClick={() => router.push(`/${part.substring(1)}`)}>
+                <Code
+                  key={`mention-${i}-${index}`}
+                  color="warning"
+                  onClick={() => router.push(`/${part.substring(1)}`)}
+                  className="cursor-pointer hover:opacity-80"
+                >
                   {part}
-                </div>
+                </Code>
               );
             } else {
               // Wrap plain text in a span with a key
@@ -260,47 +266,60 @@ const Video: NextPage = () => {
           <div className="w-full">
             {idea && (
               <>
-                <div
-                  key={idea.id}
-                  className="relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl shadow-2xl p-6 text-white h-full"
-                >
-                  {/* Background overlay */}
-                  <div className="absolute top-0 left-0 w-full h-full bg-white opacity-10 transform -skew-x-12"></div>
-
-                  {/* Card content */}
-                  <div className="relative flex flex-col h-full">
-                    {/* Logo */}
-                    <div className="mb-4">
-                      <Image
-                        src={`/spark/spark-logo.png`}
-                        alt="spark logo"
-                        height={120}
-                        width={120}
-                        className="w-12 h-auto"
-                        draggable={false}
-                      />
-                    </div>
-
-                    {/* Tweet text */}
-                    <div className="text-xl text-opacity-90 mb-4">{formatText(idea.text)}</div>
-
-                    {/* Footer */}
-                    <div className="mt-auto flex flex-row justify-between items-center space-x-2">
-                      
-                      <div className="text-base hover:underline flex flex-row items-center gap-1">
-                        <Avatar profile={posterProfile} width={7} height={7} />
-                        <span>@{posterProfile?.username}</span>
-                      </div>
-                      <span className="text-base text-gray-300">
-                        <div className="flex flex-row gap-2">
-                          <TimeAgo timestamp={idea.created_at} /> ago
-                        </div>
-                        <div>
+                <div>
+                  <Card className="text-neutral-800 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400">
+                    <CardHeader className="flex flex-row items-center justify-between gap-3">
+                      <div className="flex flex-row items-center space-x-2">
+                        <Avatar profile={posterProfile} width={10} height={10} />
+                        <Link href={`/${idea.profile.username}`} color="foreground" className="text-sm text-neutral-800 font-bold">
+                          @{idea.profile.username}
+                        </Link>
+                        <span className="text-xs flex flex-row gap-1">
+                          <TimeAgo timestamp={idea.created_at} /> ago |
                           <FormatDate timestamp={idea.created_at} />
-                        </div>
-                      </span>
-                    </div>
-                  </div>
+                        </span>
+
+                      </div>
+                      <div className="">
+                        <Image
+                          src={`/spark/spark-logo.png`}
+                          alt="spark logo"
+                          height={120}
+                          width={120}
+                          className="w-6 h-auto"
+                          draggable={false}
+                        />
+                      </div>
+                    </CardHeader>
+                    <Divider />
+                    <CardBody>
+                      <div className="text-base text-opacity- mb-4">{formatText(idea.text)}</div>
+                    </CardBody>
+                    <Divider />
+                    <CardFooter className="flex flex-row justify-between">
+                      <div className="flex flex-row gap-3">
+                        <span className="flex flex-row items-center gap-1 text-sm">
+                          <EyeIcon width={18} height={18} />
+                          <FormatNumber number={idea.idea_views[0].view_count} />
+                        </span>
+                        <span className="flex flex-row items-center gap-1 text-sm">
+                          <FireIcon width={18} height={18} />
+                          <FormatNumber number={calculatePoints(idea.idea_fires)} />
+                        </span>
+                        <span className="flex flex-row items-center gap-1 text-sm">
+                          <ChatBubbleOvalLeftEllipsisIcon width={18} height={18} />
+                          <FormatNumber number={calculateComments(idea.idea_comments)} />
+                        </span>
+                        <button className="flex flex-row items-center gap-1 text-sm text-blue-500 hover:text-blue-600" onClick={() => setShareModalOpen(true)}>
+                          <PaperAirplaneIcon width={18} height={18} />
+                          Share
+                        </button>
+                      </div>
+                      <Link color="foreground" showAnchorIcon href={`/spark/${idea.id}`} className="text-sm text-blue-500">
+                        View spark
+                      </Link>
+                    </CardFooter>
+                  </Card>
                 </div>
               </>
             )}
@@ -311,46 +330,61 @@ const Video: NextPage = () => {
               <div className="bg-base-100 rounded-lg p-4 mt-2 grow overflow-scroll">
                 <div className="flex flex-row justify-between items-center">{idea.title}</div>
                 <div className="flex flex-row gap-2 mt-1">
-                  <button
-                    className={`btn btn-secondary btn-sm ${
-                      likedByUser?.spark || tempSpark ? "cursor-default" : "btn-outline"
-                    }`}
-                    onClick={() => handleLike(idea.id, "spark", likedByUser?.spark, tempSpark)}
+                  <Button
+                    color={likedByUser?.spark || tempSpark ? "success" : "default"}
+                    variant={likedByUser?.spark || tempSpark ? "solid" : "faded"}
+                    radius="lg"
+                    size="sm"
+                    onPress={() => handleLike(idea.id, "spark", likedByUser?.spark, tempSpark)}
                   >
-                    <span>Spark</span>
-                    <div className="flex flex-row">
-                      <span>1x</span>
-                      <FireIcon width={15} />
+                    <div className="flex items-center gap-2">
+                      <HandThumbUpIcon width={15} />
+                      <span>Spark</span>
+                      <div className="flex flex-row items-center gap-1">
+                        <FireIcon width={15} />
+                        <span>1x</span>
+                      </div>
                     </div>
                     {isExplodingSpark && <ConfettiExplosion />}
-                  </button>
-                  <button
-                    className={`btn btn-secondary btn-sm ${
-                      likedByUser?.fire || tempFire ? "cursor-default" : "btn-outline"
-                    }`}
-                    onClick={() => handleLike(idea.id, "fire", likedByUser?.fire, tempFire)}
+                  </Button>
+
+                  <Button
+                    color={likedByUser?.fire || tempFire ? "success" : "default"}
+                    variant={likedByUser?.fire || tempFire ? "solid" : "faded"}
+                    radius="lg"
+                    size="sm"
+                    onPress={() => handleLike(idea.id, "fire", likedByUser?.fire, tempFire)}
                   >
-                    <span>Fire</span>
-                    <div className="flex flex-row">
-                      <span>2x</span>
-                      <FireIcon width={15} />
+                    <div className="flex items-center gap-2">
+                      <HandThumbUpIcon width={15} />
+                      <span>Fire</span>
+                      <div className="flex flex-row items-center gap-1">
+                        <FireIcon width={15} />
+                        <span>2x</span>
+                      </div>
                     </div>
                     {isExplodingFire && <ConfettiExplosion />}
-                  </button>
-                  <button
-                    className={`btn btn-secondary btn-sm ${
-                      likedByUser?.supernova || tempSupernova ? "cursor-default" : "btn-outline"
-                    }`}
-                    onClick={() => handleLike(idea.id, "supernova", likedByUser?.supernova, tempSupernova)}
+                  </Button>
+
+                  <Button
+                    color={likedByUser?.supernova || tempSupernova ? "success" : "default"}
+                    variant={likedByUser?.supernova || tempSupernova ? "solid" : "faded"}
+                    radius="lg"
+                    size="sm"
+                    onPress={() => handleLike(idea.id, "supernova", likedByUser?.supernova, tempSupernova)}
                   >
-                    <span>Supernova</span>
-                    <div className="flex flex-row">
-                      <span>3x</span>
-                      <FireIcon width={15} />
+                    <div className="flex items-center gap-2">
+                      <HandThumbUpIcon width={15} />
+                      <span>Supernova</span>
+                      <div className="flex flex-row items-center gap-1">
+                        <FireIcon width={15} />
+                        <span>3x</span>
+                      </div>
                     </div>
                     {isExplodingSupernova && <ConfettiExplosion />}
-                  </button>
+                  </Button>
                 </div>
+
               </div>
               <div className="flex flex-col bg-base-100 rounded-lg p-4 mt-2 mb-2 grow overflow-scroll">
                 <h1 className="text-lg font-bold">Discussion</h1>
@@ -451,9 +485,8 @@ const Video: NextPage = () => {
                             Like
                           </div> */}
                           <div
-                            className={`cursor-pointer ${
-                              replyButton !== null && replyButton == comment.id && "text-primary block"
-                            } flex flex-row items-center justify-center gap-1 opacity-60`}
+                            className={`cursor-pointer ${replyButton !== null && replyButton == comment.id && "text-primary block"
+                              } flex flex-row items-center justify-center gap-1 opacity-60`}
                             onClick={() => handleReply(comment.id)}
                           >
                             <ChatBubbleOvalLeftEllipsisIcon width={18} height={18} />
@@ -537,7 +570,7 @@ const Video: NextPage = () => {
         )}
 
         <div className="idea flex flex-col gap-2">
-        {loadingIdea &&
+          {loadingIdea &&
             <div>
               <RotatingSquare
                 visible={true}
@@ -551,28 +584,42 @@ const Video: NextPage = () => {
             </div>}
           {posterProfile && (
             <>
-              <div className="stats shadow flex flex-col lg:w-[350px] py-5 ml-0 lg:ml-2 h-fit">
-                <Link href={"/" + posterProfile.username} className="stat cursor-pointer hover:opacity-85 py-2">
-                  <div className="stat-figure text-secondary">
+              <div className="stats shadow flex flex-col lg:w-[350px] py-5 ml-0 lg:ml-2 items-center justify-center text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium text-sm">
+                <div className="stat flex flex-row justify-between cursor-pointer hover:opacity-85">
+                  <div>
+                    <div className="flex flex-row gap-1 items-center">
+                      <span>{levelName}</span>
+                      {levelName == "Spark" && <CheckBadgeIcon width={20} height={20} className="text-primary" />}
+                    </div>
+                    <Link href={"/" + posterProfile?.username} className="font-bold text-xl">{posterProfile?.username}</Link>
+                  </div>
+                  <div className="text-secondary">
                     {posterProfile?.avatar_url && (
-                      <div className="avatar placeholder">
+                      <div className="avatar placeholder cursor-default">
                         <div className="w-12 rounded-full">
-                        <Image src={posterProfile?.avatar_url} alt={""} width={80} height={80} />  
+                          <Image src={posterProfile?.avatar_url} alt={""} width={80} height={80} />
                         </div>
                       </div>
                     )}
                     {!posterProfile?.avatar_url && (
-                      <div className="avatar placeholder">
+                      <div className="avatar placeholder cursor-default">
                         <div className="bg-neutral text-neutral-content rounded-full w-12">
                           <span className="text-xl">{posterProfile?.username.charAt(0).toUpperCase()}</span>
                         </div>
                       </div>
                     )}
                   </div>
-                  <div className="stat-title">{levelName}</div>
-                  <div className="stat-value text-xl">{posterProfile.username}</div>
-                  {/* <div className="stat-desc">Level up</div> */}
-                </Link>
+                </div>
+                <div className="flex flex-col items-start w-full px-6">
+                  {posterProfile?.bio && <div className="text-sm font-normal opacity-80 mb-2 ">
+                    {posterProfile.bio}
+                  </div>}
+
+                  <Snippet color="primary">{`sprq.social/${posterProfile.username}`}</Snippet>
+                </div>
+
+              </div>
+              <div className="stats shadow flex flex-col lg:w-[350px] py-5 ml-0 lg:ml-2">
                 <div className="stat cursor-pointer hover:opacity-85 py-2" onClick={() => setKinsModalOpen(true)}>
                   <div className="stat-figure text-primary">
                     <UserIcon width={30} />
@@ -589,7 +636,7 @@ const Video: NextPage = () => {
                 </div>
                 <div className="px-5 my-2">
                   {isAuthenticated == false && (
-                    <Link href="/login" className="btn bg-base-200 w-full relative">
+                    <Link href="/login" className="btn bg-base-200 w-full relative text-content-200">
                       Connect
                       <UserPlusIcon width={23} className="absolute right-3 opacity-65" />
                     </Link>
@@ -638,24 +685,24 @@ const Video: NextPage = () => {
                     </div>
                   )}
                   {isAuthenticated == false && (
-                    <Link href="/login" className="btn btn-secondary w-full">
-                    Send Love
-                    <div className="">
-                      <Hearts
-                        height="40"
-                        width="40"
-                        color="#fff"
-                        ariaLabel="hearts-loading"
-                        wrapperStyle={{}}
-                        wrapperClass=""
-                        visible={true}
-                      />
-                    </div>
-                  </Link>
+                    <Link href="/login" className="btn btn-secondary w-full text-content-200">
+                      Send Love
+                      <div className="">
+                        <Hearts
+                          height="40"
+                          width="40"
+                          color="#fff"
+                          ariaLabel="hearts-loading"
+                          wrapperStyle={{}}
+                          wrapperClass=""
+                          visible={true}
+                        />
+                      </div>
+                    </Link>
                   )}
                 </div>
               </div>
-              <div className="stats shadow flex flex-col lg:w-[350px] py-5 ml-0 lg:ml-2 mb-2 h-fit">
+              <div className="stats shadow flex flex-col lg:w-[350px] py-5 ml-0 lg:ml-2 mb-2">
                 <div className="stat hover:opacity-85 py-2">
                   <div className="stat-figure text-primary">
                     <EyeIcon width={30} />
@@ -690,7 +737,7 @@ const Video: NextPage = () => {
                     <PaperAirplaneIcon width={20} className="absolute right-3 opacity-65" />
                   </div>
                 </div>
-                
+
               </div>
             </>
           )}

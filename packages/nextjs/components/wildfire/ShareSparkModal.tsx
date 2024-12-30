@@ -17,7 +17,7 @@ const ShareVideoModal = ({ data, onClose }: any) => {
   };
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText("https://3seconds.me/spark/" + data);
+    navigator.clipboard.writeText("https://sprq.social/spark/" + data);
     setCopied(true);
     handleConfetti();
     setTimeout(() => {
@@ -44,7 +44,7 @@ const ShareVideoModal = ({ data, onClose }: any) => {
           <input
             className="input input-bordered join-item md:min-w-[350px]"
             readOnly
-            value={"https://www.3seconds.me/spark/" + data}
+            value={"https://sprq.social/spark/" + data}
           />
           <button className="btn join-item rounded-r-full" onClick={handleCopyToClipboard}>
             {copied ? "Copied!✨" : "Copy"}

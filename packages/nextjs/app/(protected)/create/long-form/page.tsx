@@ -334,7 +334,7 @@ const CreateLong: NextPage = () => {
   };
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText("https://3seconds.me/video/" + videoId);
+    navigator.clipboard.writeText("https://sprq.social/video/" + videoId);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -512,7 +512,7 @@ const CreateLong: NextPage = () => {
                   <input
                     className="input input-bordered join-item md:min-w-[350px]"
                     readOnly
-                    value={"https://www.3seconds.me/video/" + videoId}
+                    value={"https://sprq.social/video/" + videoId}
                   />
                   <button
                     className="btn join-item rounded-r-full"

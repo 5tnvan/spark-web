@@ -23,6 +23,7 @@ const nextConfig = {
       "images.unsplash.com",
       "api.producthunt.com",
       "aceternity.com",
+      "avatars.githubusercontent.com",
     ],
   },
   // async redirects() {

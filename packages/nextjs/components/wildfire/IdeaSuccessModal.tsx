@@ -22,7 +22,7 @@ const IdeaModal = ({ data, onClose }: { data: any; onClose: () => void }) => {
   };
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText("https://3seconds.me/spark/" + data);
+    navigator.clipboard.writeText("https://sprq.social/spark/" + data);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -44,7 +44,7 @@ const IdeaModal = ({ data, onClose }: { data: any; onClose: () => void }) => {
                   <input
                     className="input input-bordered join-item md:min-w-[350px]"
                     readOnly
-                    value={"https://www.3seconds.me/spark/" + data}
+                    value={"https://sprq.social/spark/" + data}
                   />
                   <button
                     className="btn join-item bg-base-100 rounded-r-full"

@@ -15,7 +15,7 @@ const ShareModal = ({ data, onClose }: any) => {
   };
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText("https://3seconds.me/v/" + data);
+    navigator.clipboard.writeText("https://sprq.social/v/" + data);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -37,7 +37,7 @@ const ShareModal = ({ data, onClose }: any) => {
           <input
             className="input input-bordered join-item md:min-w-[350px]"
             readOnly
-            value={"https://www.3seconds.me/v/" + data}
+            value={"https://sprq.social/v/" + data}
           />
           <button
             className="btn join-item rounded-r-full"
