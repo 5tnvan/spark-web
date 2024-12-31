@@ -227,7 +227,7 @@ const Video: NextPage = () => {
           .map((part, index) => {
             if (part.startsWith("#")) {
               return (
-                <Code key={`hash-${i}-${index}`} className="text-blue-500 hover:opacity-80">
+                <Code color="primary" key={`hash-${i}-${index}`} className="hover:opacity-80">
                   {part}</Code>
 
               );
@@ -235,7 +235,7 @@ const Video: NextPage = () => {
               return (
                 <Code
                   key={`mention-${i}-${index}`}
-                  color="warning"
+                  color="secondary"
                   onClick={() => router.push(`/${part.substring(1)}`)}
                   className="cursor-pointer hover:opacity-80"
                 >

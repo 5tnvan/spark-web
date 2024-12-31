@@ -2,6 +2,7 @@
 
 import { createClient } from "~~/utils/supabase/server";
 
+
 /**
  * FETCH: fetchUserIdeaFeedAll()
  * DB: supabase
@@ -25,7 +26,8 @@ export const fetchUserIdeaFeedWithRange = async (user_id: string, from: any, to:
   const supabase = createClient();
   const { data } = await supabase
     .from("idea_desc_view")
-    .select("*, idea_views(*)")
+    .select(`*, idea_views(*), idea_fires(*),
+      idea_comments(*, profile:user_id(username), idea_replies:id(*, profile:user_id(id, username, avatar_url)))`)
     .eq("user_id", user_id)
     .order("created_at", { ascending: false })
     .range(from, to)
@@ -42,7 +44,17 @@ export const fetchUserIdeaFeedWithRange = async (user_id: string, from: any, to:
 
 export const fetchRandomIdeaFeed = async (limit: any) => {
   const supabase = createClient();
-  const { data } = await supabase.from("idea_random_view").select(`*, profile:user_id(*), idea_views(*)`).limit(limit).neq("archived", true);
+  const { data } = await supabase
+    .from("idea_random_view")
+    .select(
+      `*,
+      profile:user_id(*),
+      idea_views(*),
+      idea_fires(*),
+      idea_comments(*, profile:user_id(username), idea_replies:id(*, profile:user_id(id, username, avatar_url)))`,
+    )
+    .limit(limit)
+    .neq("archived", true);
 
   return data;
 };
@@ -57,7 +69,12 @@ export const fetchLastestIdeaFeed = async (from: any, to: any) => {
 
   const { data, error } = await supabase
     .from("idea_desc_view")
-    .select(`*, profile:user_id(*), idea_views(*)`)
+    .select(`*,
+      profile:user_id(*),
+      idea_views(*),
+      idea_fires(*),
+      idea_comments(*, profile:user_id(username),
+      idea_replies:id(*, profile:user_id(id, username, avatar_url)))`)
     .order("created_at", { ascending: false })
     .range(from, to)
     .neq("archived", true);
@@ -101,7 +118,11 @@ export const fetchUserFeedFromArrayOfFollowing = async (followingArray: any, fro
   const supabase = createClient();
   const { data } = await supabase
     .from("idea_desc_view")
-    .select(`*, profile:user_id(*), idea_views(*)`)
+    .select(`*,
+      profile:user_id(*),
+      idea_views(*),
+      idea_fires(*),
+      idea_comments(*, profile:user_id(username), idea_replies:id(*, profile:user_id(id, username, avatar_url)))`)
     .in("user_id", followingArray)
     .range(from, to)
     .neq("archived", true);

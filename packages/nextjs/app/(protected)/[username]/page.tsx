@@ -3,11 +3,10 @@
 import { useContext, useState } from "react";
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { NextPage } from "next";
 import { CheckCircleIcon, CircleStackIcon, UserIcon } from "@heroicons/react/24/outline";
-import { ArrowDownCircleIcon, CheckBadgeIcon, EyeIcon, UserPlusIcon } from "@heroicons/react/24/solid";
+import { ArrowDownCircleIcon, ChatBubbleOvalLeftEllipsisIcon, CheckBadgeIcon, EyeIcon, FireIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { AuthContext, AuthUserFollowsContext } from "~~/app/context";
 import FormatNumber from "~~/components/wildfire/FormatNumber";
 import KinsModal from "~~/components/wildfire/KinsModal";
@@ -25,7 +24,8 @@ import { calculateSum } from "~~/utils/wildfire/calculateSum";
 import { convertEthToUsd } from "~~/utils/wildfire/convertEthToUsd";
 import { deleteFollow, insertFollow } from "~~/utils/wildfire/crud/followers";
 import { Avatar } from "~~/components/Avatar";
-import { Snippet } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader, Divider, Link, Snippet } from "@nextui-org/react";
+import { calculateComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
 
 const Profile: NextPage = () => {
   const { username } = useParams();
@@ -176,19 +176,21 @@ const Profile: NextPage = () => {
       case "sparks":
         return (
           <div className="mr-2 mb-1">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
-              {ideasFeed.map((idea: any, index: number) => (
-                <div
-                  key={index}
-                  className="relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl shadow-2xl p-6 text-white h-full transform transition-transform duration-300 hover:-translate-y-2"
-                >
-                  {/* Background overlay */}
-                  <div className="absolute top-0 left-0 w-full h-full bg-white opacity-10 transform -skew-x-12"></div>
-
-                  {/* Card content */}
-                  <Link className="relative z-10 flex flex-col h-full" href={`/spark/${idea.id}`}>
-                    {/* Logo */}
-                    <div className="mb-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 p-2">
+            {ideasFeed.map((idea, index) => (
+                <>
+                  <Card className="" key={index}>
+                    <CardHeader className="flex flex-row items-center justify-between gap-3">
+                      <div className="flex flex-row items-center space-x-2">
+                        <Avatar profile={posterProfile} width={10} height={10} />
+                        <Link href={`/${posterProfile.username}`} color="foreground" className="text-sm font-bold">
+                          @{posterProfile.username}
+                        </Link>
+                        <span className="text-xs text-gray-300">
+                          <TimeAgo timestamp={idea.created_at} />
+                        </span>
+                      </div>
+                      <div className="">
                       <Image
                         src={`/spark/spark-logo.png`}
                         alt="spark logo"
@@ -198,29 +200,33 @@ const Profile: NextPage = () => {
                         draggable={false}
                       />
                     </div>
-
-                    {/* Tweet text */}
-                    <div className="line-clamp-5 text-lg text-opacity-90 mb-4">{formatText(idea.text)}</div>
-
-                    {/* Footer */}
-                    <div className="mt-auto flex flex-row items-center justify-between ">
-                      <div className="flex flex-row items-center space-x-2">
-                        <Avatar profile={posterProfile} width={10} height={10} />
-                        <div className="text-sm hover:underline">
-                          @{posterProfile.username}
-                        </div>
-                        <span className="text-xs text-gray-300">
-                          <TimeAgo timestamp={idea.created_at} />
-                        </span>
+                    </CardHeader>
+                    <Divider />
+                    <CardBody>
+                    <div className="text-base text-opacity- mb-4">{formatText(idea.text)}</div>
+                    </CardBody>
+                    <Divider />
+                    <CardFooter className="flex flex-row justify-between">
+                    <div className="flex flex-row gap-3">
+                        <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
+                          <EyeIcon width={18} height={18} />
+                          <FormatNumber number={idea.idea_views[0].view_count} />
+                        </Link>
+                        <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
+                          <FireIcon width={18} height={18} />
+                          <FormatNumber number={calculatePoints(idea.idea_fires)} />
+                        </Link>
+                        <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
+                          <ChatBubbleOvalLeftEllipsisIcon width={18} height={18} />
+                          <FormatNumber number={calculateComments(idea.idea_comments)} />
+                        </Link>
                       </div>
-                      <span className="flex flex-row items-center gap-1 text-xs text-gray-100">
-                        <EyeIcon width={18} height={18} />
-                        <FormatNumber number={idea.idea_views[0].view_count} />
-                      </span>
-                    </div>
-                    
-                  </Link>
-                </div>
+                      <Link color="foreground" showAnchorIcon href={`/spark/${idea.id}`} className="text-sm text-blue-500">
+                        View spark
+                      </Link>
+                    </CardFooter>
+                  </Card></>
+                
               ))}
             </div>
 
@@ -383,9 +389,9 @@ const Profile: NextPage = () => {
         {/* CONTENT */}
         <div className="content m-2 mt-0">
           {/* PROFILE */}
-          <div className="profile flex flex-col md:flex-row justify-center items-center gap-2">
+          <div className="profile flex flex-col lg:flex-row justify-center items-center gap-2">
             {/* KINS */}
-            <div className="stats shadow flex flex-col grow w-full max-w-sm h-full py-5 mb-2">
+            <div className="stats shadow flex flex-col grow w-full h-full py-5 mb-1">
               <div className="stat cursor-pointer hover:opacity-85 py-2" onClick={() => setKinsModalOpen(true)}>
                 <div className="stat-figure text-primary">
                   <UserIcon width={30} />
@@ -428,7 +434,7 @@ const Profile: NextPage = () => {
             </div>
 
             {/* USERNAME */}
-            <div className="stats shadow flex flex-col items-center justify-center grow w-full max-w-sm py-5 mb-2 text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium text-sm">
+            <div className="stats shadow flex flex-col items-center justify-center grow w-full py-5 mb-1 text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium text-sm">
               <div className="stat flex flex-row justify-between cursor-pointer hover:opacity-85">
                 <div>
                   <div className="flex flex-row gap-1 items-center">
@@ -465,7 +471,7 @@ const Profile: NextPage = () => {
             </div>
 
             {/* SEND LOVE */}
-            <div className="stats shadow flex flex-col grow w-full h-full py-5 mb-2 max-w-sm">
+            <div className="stats shadow flex flex-col grow w-full h-full py-5 mb-1">
               <div onClick={() => setTransactionsModalOpen(true)} className="stat cursor-pointer hover:opacity-85">
                 <div className="stat-figure text-primary">
                   <CircleStackIcon width={30} />

@@ -5,7 +5,7 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { NextPage } from "next";
-import { ArrowDownCircleIcon, ArrowPathIcon, DevicePhoneMobileIcon, EyeIcon, SparklesIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
+import { ArrowDownCircleIcon, ArrowPathIcon, ChatBubbleOvalLeftEllipsisIcon, DevicePhoneMobileIcon, EyeIcon, FireIcon, SparklesIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
 import FormatNumber from "~~/components/wildfire/FormatNumber";
 import { TimeAgo } from "~~/components/wildfire/TimeAgo";
 import { Avatar } from "~~/components/Avatar";
@@ -16,6 +16,7 @@ import { useShortsFeed } from "~~/hooks/wildfire/useShortsFeed";
 import { Bars } from "react-loader-spinner";
 import { useKins } from "~~/hooks/wildfire/useKins";
 import { Card, CardBody, CardFooter, CardHeader, Chip, Code, Divider, Link } from "@nextui-org/react";
+import { calculateComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -112,16 +113,26 @@ const Home: NextPage = () => {
                     </CardBody>
                     <Divider />
                     <CardFooter className="flex flex-row justify-between">
-                    <span className="flex flex-row items-center gap-1 text-sm">
-                        <EyeIcon width={18} height={18} />
-                        <FormatNumber number={idea.idea_views[0].view_count} />
-                      </span>
+                    <div className="flex flex-row gap-3">
+                        <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
+                          <EyeIcon width={18} height={18} />
+                          <FormatNumber number={idea.idea_views[0].view_count} />
+                        </Link>
+                        <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
+                          <FireIcon width={18} height={18} />
+                          <FormatNumber number={calculatePoints(idea.idea_fires)} />
+                        </Link>
+                        <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
+                          <ChatBubbleOvalLeftEllipsisIcon width={18} height={18} />
+                          <FormatNumber number={calculateComments(idea.idea_comments)} />
+                        </Link>
+                      </div>
                       <Link color="foreground" showAnchorIcon href={`/spark/${idea.id}`} className="text-sm text-blue-500">
                         View spark
                       </Link>
                     </CardFooter>
-                  </Card></>
-                
+                  </Card>
+                </>
               ))}
             </div>
 

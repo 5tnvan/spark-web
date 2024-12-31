@@ -3,14 +3,15 @@
 import { useState } from "react";
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { NextPage } from "next";
-import { ArrowDownCircleIcon, EyeIcon } from "@heroicons/react/24/solid";
+import { ArrowDownCircleIcon, ChatBubbleOvalLeftEllipsisIcon, EyeIcon, FireIcon } from "@heroicons/react/24/solid";
 import { TimeAgo } from "~~/components/wildfire/TimeAgo";
 import { useIdeasFeed } from "~~/hooks/wildfire/useIdeaFeeds";
 import { Avatar } from "~~/components/Avatar";
 import { useRouter } from "next/navigation";
 import FormatNumber from "~~/components/wildfire/FormatNumber";
+import { Card, CardBody, CardFooter, CardHeader, Code, Divider, Link } from "@nextui-org/react";
+import { calculateComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
 
 const Sparks: NextPage = () => {
   const router = useRouter();
@@ -28,15 +29,20 @@ const Sparks: NextPage = () => {
           .map((part, index) => {
             if (part.startsWith("#")) {
               return (
-                <div key={`hash-${i}-${index}`} className="text-primary">
-                  {part}
-                </div>
+                <Code key={`hash-${i}-${index}`} className="text-blue-500 hover:opacity-80">
+                {part}</Code>
+                
               );
             } else if (part.startsWith("@")) {
               return (
-                <div key={`mention-${i}-${index}`} className="text-primary" onClick={() => router.push(`/${part.substring(1)}`)}>
+                <Code
+                  key={`mention-${i}-${index}`}
+                  color="warning"
+                  onClick={() => router.push(`/${part.substring(1)}`)}
+                  className="cursor-pointer hover:opacity-80"
+                >
                   {part}
-                </div>
+                </Code>
               );
             } else {
               // Wrap plain text in a span with a key
@@ -101,48 +107,55 @@ const Sparks: NextPage = () => {
         {/* GRID FEED */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
           {feed.map((idea: any, index: any) => (
-            <div
-              key={index}
-              className="relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl shadow-2xl p-6 text-white h-full transform transition-transform duration-300 hover:-translate-y-2"
-            >
-              {/* Background overlay */}
-              <div className="absolute top-0 left-0 w-full h-full bg-white opacity-10 transform -skew-x-12"></div>
-
-              {/* Card content */}
-              <Link className="relative z-10 flex flex-col h-full" href={`/spark/${idea.id}`}>
-                {/* Logo */}
-                <div className="mb-4">
-                  <Image
-                    src={`/spark/spark-logo.png`}
-                    alt="spark logo"
-                    height={120}
-                    width={120}
-                    className="w-6 h-auto"
-                    draggable={false}
-                  />
+            <>
+            <Card className="" key={index}>
+              <CardHeader className="flex flex-row items-center justify-between gap-3">
+                <div className="flex flex-row items-center space-x-2">
+                  <Avatar profile={idea.profile} width={10} height={10} />
+                  <Link href={`/${idea.profile.username}`} color="foreground" className="text-sm font-bold">
+                    @{idea.profile.username}
+                  </Link>
+                  <span className="text-xs text-gray-300">
+                    <TimeAgo timestamp={idea.created_at} />
+                  </span>
                 </div>
-
-                {/* Tweet text */}
-                <div className="line-clamp-5 text-lg text-opacity-90 mb-4">{formatText(idea.text)}</div>
-
-                {/* Footer */}
-                <div className="mt-auto flex flex-row items-center justify-between ">
-                      <div className="flex flex-row items-center space-x-2">
-                        <Avatar profile={idea.profile} width={10} height={10} />
-                        <div className="text-sm">
-                          @{idea.profile.username}
-                        </div>
-                        <span className="text-xs text-gray-300">
-                          <TimeAgo timestamp={idea.created_at} />
-                        </span>
-                      </div>
-                      <span className="flex flex-row items-center gap-1 text-xs text-gray-100">
-                        <EyeIcon width={18} height={18} />
-                        <FormatNumber number={idea.idea_views[0].view_count} />
-                      </span>
-                    </div>
-              </Link>
-            </div>
+                <div className="">
+                <Image
+                  src={`/spark/spark-logo.png`}
+                  alt="spark logo"
+                  height={120}
+                  width={120}
+                  className="w-6 h-auto"
+                  draggable={false}
+                />
+              </div>
+              </CardHeader>
+              <Divider />
+              <CardBody>
+              <div className="text-base text-opacity- mb-4">{formatText(idea.text)}</div>
+              </CardBody>
+              <Divider />
+              <CardFooter className="flex flex-row justify-between">
+              <div className="flex flex-row gap-3">
+                  <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
+                    <EyeIcon width={18} height={18} />
+                    <FormatNumber number={idea.idea_views[0].view_count} />
+                  </Link>
+                  <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
+                    <FireIcon width={18} height={18} />
+                    <FormatNumber number={calculatePoints(idea.idea_fires)} />
+                  </Link>
+                  <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
+                    <ChatBubbleOvalLeftEllipsisIcon width={18} height={18} />
+                    <FormatNumber number={calculateComments(idea.idea_comments)} />
+                  </Link>
+                </div>
+                <Link color="foreground" showAnchorIcon href={`/spark/${idea.id}`} className="text-sm text-blue-500">
+                  View spark
+                </Link>
+              </CardFooter>
+            </Card>
+          </>
           ))}
         </div>
 
