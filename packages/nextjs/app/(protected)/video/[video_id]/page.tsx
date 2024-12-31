@@ -24,7 +24,7 @@ import {
   UserPlusIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { ChatBubbleOvalLeftIcon, ChevronDownIcon, PauseIcon, PlayIcon } from "@heroicons/react/24/solid";
+import { ChatBubbleOvalLeftIcon, CheckBadgeIcon, ChevronDownIcon, HandThumbUpIcon, PauseIcon, PlayIcon } from "@heroicons/react/24/solid";
 import { EyeIcon, FireIcon } from "@heroicons/react/24/solid";
 import { AuthContext, AuthUserContext, AuthUserFollowsContext } from "~~/app/context";
 import { Avatar } from "~~/components/Avatar";
@@ -43,6 +43,7 @@ import { insertReply } from "~~/utils/wildfire/crud/long_form_replies";
 import { incrementVideoViews } from "~~/utils/wildfire/incrementVideoViews";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import { Button, Snippet } from "@nextui-org/react";
 
 const livepeerClient = new Livepeer({
   apiKey: process.env.NEXT_PUBLIC_LIVEPEER_API_KEY,
@@ -463,46 +464,61 @@ const Video: NextPage = () => {
                   </div>
                 </div>
                 <div className="flex flex-row gap-2 mt-1">
-                  <button
-                    className={`btn btn-secondary btn-sm ${
-                      likedByUser?.spark || tempSpark ? "cursor-default" : "btn-outline"
-                    }`}
-                    onClick={() => handleLike(video.id, "spark", likedByUser?.spark, tempSpark)}
+                  <Button
+                    color={likedByUser?.spark || tempSpark ? "success" : "default"}
+                    variant={likedByUser?.spark || tempSpark ? "solid" : "faded"}
+                    radius="lg"
+                    size="sm"
+                    onPress={() => handleLike(video.id, "spark", likedByUser?.spark, tempSpark)}
                   >
-                    <span>Spark</span>
-                    <div className="flex flex-row">
-                      <span>1x</span>
-                      <FireIcon width={15} />
+                    <div className="flex items-center gap-2">
+                      <HandThumbUpIcon width={15} />
+                      <span>Spark</span>
+                      <div className="flex flex-row items-center gap-1">
+                        <FireIcon width={15} />
+                        <span>1x</span>
+                      </div>
                     </div>
                     {isExplodingSpark && <ConfettiExplosion />}
-                  </button>
-                  <button
-                    className={`btn btn-secondary btn-sm ${
-                      likedByUser?.fire || tempFire ? "cursor-default" : "btn-outline"
-                    }`}
-                    onClick={() => handleLike(video.id, "fire", likedByUser?.fire, tempFire)}
+                  </Button>
+
+                  <Button
+                    color={likedByUser?.fire || tempFire ? "success" : "default"}
+                    variant={likedByUser?.fire || tempFire ? "solid" : "faded"}
+                    radius="lg"
+                    size="sm"
+                    onPress={() => handleLike(video.id, "fire", likedByUser?.fire, tempFire)}
                   >
-                    <span>Fire</span>
-                    <div className="flex flex-row">
-                      <span>2x</span>
-                      <FireIcon width={15} />
+                    <div className="flex items-center gap-2">
+                      <HandThumbUpIcon width={15} />
+                      <span>Fire</span>
+                      <div className="flex flex-row items-center gap-1">
+                        <FireIcon width={15} />
+                        <span>2x</span>
+                      </div>
                     </div>
                     {isExplodingFire && <ConfettiExplosion />}
-                  </button>
-                  <button
-                    className={`btn btn-secondary btn-sm ${
-                      likedByUser?.supernova || tempSupernova ? "cursor-default" : "btn-outline"
-                    }`}
-                    onClick={() => handleLike(video.id, "supernova", likedByUser?.supernova, tempSupernova)}
+                  </Button>
+
+                  <Button
+                    color={likedByUser?.supernova || tempSupernova ? "success" : "default"}
+                    variant={likedByUser?.supernova || tempSupernova ? "solid" : "faded"}
+                    radius="lg"
+                    size="sm"
+                    onPress={() => handleLike(video.id, "supernova", likedByUser?.supernova, tempSupernova)}
                   >
-                    <span>Supernova</span>
-                    <div className="flex flex-row">
-                      <span>3x</span>
-                      <FireIcon width={15} />
+                    <div className="flex items-center gap-2">
+                      <HandThumbUpIcon width={15} />
+                      <span>Supernova</span>
+                      <div className="flex flex-row items-center gap-1">
+                        <FireIcon width={15} />
+                        <span>3x</span>
+                      </div>
                     </div>
                     {isExplodingSupernova && <ConfettiExplosion />}
-                  </button>
+                  </Button>
                 </div>
+                
                 {video.description && <div className="text-sm mt-2 opacity-75">{video.description}</div>}
               </div>
               <div className="flex flex-col bg-base-100 rounded-lg p-4 mt-2 mb-2 grow overflow-scroll">
@@ -705,109 +721,40 @@ const Video: NextPage = () => {
             </div>}
           {posterProfile && (
             <>
-              <div className="stats shadow flex flex-col lg:w-[350px] py-5 ml-0 lg:ml-2 h-fit">
-                <Link href={"/" + posterProfile.username} className="stat cursor-pointer hover:opacity-85 py-2">
-                  <div className="stat-figure text-secondary">
+              <div className="stats shadow flex flex-col lg:w-[350px] py-5 ml-0 lg:ml-2 items-center justify-center text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium text-sm">
+                <div className="stat flex flex-row justify-between cursor-pointer hover:opacity-85">
+                  <div>
+                    <div className="flex flex-row gap-1 items-center">
+                      <span>{levelName}</span>
+                      {levelName == "Spark" && <CheckBadgeIcon width={20} height={20} className="text-primary" />}
+                    </div>
+                    <Link href={"/" + posterProfile?.username} className="font-bold text-xl">{posterProfile?.username}</Link>
+                  </div>
+                  <div className="text-secondary">
                     {posterProfile?.avatar_url && (
-                      <div className="avatar placeholder">
+                      <div className="avatar placeholder cursor-default">
                         <div className="w-12 rounded-full">
-                          <Image src={posterProfile?.avatar_url} alt={""} width={80} height={80} />                        
+                          <Image src={posterProfile?.avatar_url} alt={""} width={80} height={80} />
                         </div>
                       </div>
                     )}
                     {!posterProfile?.avatar_url && (
-                      <div className="avatar placeholder">
+                      <div className="avatar placeholder cursor-default">
                         <div className="bg-neutral text-neutral-content rounded-full w-12">
                           <span className="text-xl">{posterProfile?.username.charAt(0).toUpperCase()}</span>
                         </div>
                       </div>
                     )}
                   </div>
-                  <div className="stat-title">{levelName}</div>
-                  <div className="stat-value text-xl">{posterProfile.username}</div>
-                  {/* <div className="stat-desc">Level up</div> */}
-                </Link>
-                <div className="stat cursor-pointer hover:opacity-85 py-2" onClick={() => setKinsModalOpen(true)}>
-                  <div className="stat-figure text-primary">
-                    <UserIcon width={30} />
-                  </div>
-                  <div className="stat-title">Kins</div>
-                  <div className="stat-value text-primary text-2xl">
-                    <FormatNumber
-                      number={
-                        tempFollow ? followers?.length + following.length + 1 : followers?.length + following.length
-                      }
-                    />
-                  </div>
-                  <div className="stat-desc">See kins</div>
                 </div>
-                <div className="px-5 my-2">
-                  {isAuthenticated == false && (
-                    <Link href="/login" className="btn bg-base-200 w-full relative">
-                      Connect
-                      <UserPlusIcon width={23} className="absolute right-3 opacity-65" />
-                    </Link>
-                  )}
-                  {isAuthenticated == true && (
-                    <div className="btn bg-base-200 w-full relative" onClick={() => handleConnect()}>
-                      {!tempFollow ? (
-                        <>
-                          {followed == true && (
-                            <>
-                              <span>Connected</span>
-                              <CheckCircleIcon width={23} className="absolute right-3 opacity-65" />
-                            </>
-                          )}
-                          {followed == false && (
-                            <>
-                              <span>Connect</span>
-                              <UserPlusIcon width={23} className="absolute right-3 opacity-65" />
-                            </>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          <span>Connected</span>
-                          <CheckCircleIcon width={23} className="absolute right-3 opacity-65" />
-                        </>
-                      )}
-                    </div>
-                  )}
+                <div className="flex flex-col items-start w-full px-6">
+                  {posterProfile?.bio && <div className="text-sm font-normal opacity-80 mb-2 ">
+                    {posterProfile.bio}
+                  </div>}
+
+                  <Snippet color="primary">{`sprq.social/${posterProfile.username}`}</Snippet>
                 </div>
-                <div className="px-5">
-                  {isAuthenticated == true && (
-                    <div className="btn btn-secondary w-full relative" onClick={() => setTipModalOpen(true)}>
-                      Send Love
-                      <div className="">
-                        <Hearts
-                          height="40"
-                          width="40"
-                          color="#fff"
-                          ariaLabel="hearts-loading"
-                          wrapperStyle={{}}
-                          wrapperClass=""
-                          visible={true}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  {isAuthenticated == false && (
-                    <Link href="/login" className="btn btn-secondary w-full">
-                      Send Love
-                      <div className="">
-                      <Hearts
-                          height="40"
-                          width="40"
-                          color="#fff"
-                          ariaLabel="hearts-loading"
-                          wrapperStyle={{}}
-                          wrapperClass=""
-                          visible={true}
-                        />
-                      </div>
-                    </Link>
-                  )}
-                </div>
+
               </div>
               <div className="stats shadow flex flex-col lg:w-[350px] py-5 ml-0 lg:ml-2 h-fit">
                 <Link href="https://www.livepeer.org/" target="_blank" className="self-center">

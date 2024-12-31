@@ -534,8 +534,9 @@ const Profile: NextPage = () => {
                 </div>
                 <div className="text-secondary">
                   {posterProfile?.avatar_url && (
-                    <div className="avatar online">
-                    <div className="w-12 rounded-full">
+                  <div className="relative avatar">
+                    <div className="absolute w-[10px] h-[10px] top-1 right-0 bg-green-500 rounded-full"></div>
+                    <div className=" w-12 rounded-full">
                       <Image
                         src={posterProfile?.avatar_url}
                         width={60}
@@ -554,7 +555,7 @@ const Profile: NextPage = () => {
                   </div>
                   )}
                   {!posterProfile?.avatar_url && (
-                    <div className="avatar placeholder online">
+                    <div className="avatar placeholder">
                     <div className="bg-neutral text-neutral-content rounded-full w-12">
                       <span className="text-xl">{posterProfile?.username.charAt(0).toUpperCase()}</span>
                     </div>

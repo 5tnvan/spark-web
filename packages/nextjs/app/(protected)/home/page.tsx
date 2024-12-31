@@ -17,6 +17,7 @@ import { Bars } from "react-loader-spinner";
 import { useKins } from "~~/hooks/wildfire/useKins";
 import { Card, CardBody, CardFooter, CardHeader, Chip, Code, Divider, Link } from "@nextui-org/react";
 import { calculateComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
+import ArrowDownFetchMore from "~~/components/wildfire/ArrowDownFetchMore";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -81,7 +82,7 @@ const Home: NextPage = () => {
     switch (activeTab) {
       case "sparks":
         return (
-          <div className="mr-2 mb-1">
+          <div className="mb-1">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 p-2">
               {ideasFeed.map((idea, index) => (
                 <>
@@ -165,7 +166,7 @@ const Home: NextPage = () => {
         );
       case "videos":
         return (
-          <div className="grow mr-2 mb-1">
+          <div className="grow mb-1">
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-1">
               {videosFeed.map((video, index) => (
                 <div key={index} className="flex flex-col mt-1">
@@ -227,7 +228,7 @@ const Home: NextPage = () => {
         );
       case "shorts":
         return (
-          <div className="grow mt-2 mr-2 mb-1">
+          <div className="grow mb-1">
             {shortsFeed && shortsFeed.length > 0 && (
               <>
                 <div className="grid grid-cols-3 lg:grid-cols-6 rounded-box">
