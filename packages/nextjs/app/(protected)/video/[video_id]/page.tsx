@@ -15,13 +15,13 @@ import * as Player from "@livepeer/react/player";
 import { Livepeer } from "livepeer";
 import { NextPage } from "next";
 import ConfettiExplosion from "react-confetti-explosion";
-import { RotatingSquare } from "react-loader-spinner";
+import { Hearts, RotatingSquare } from "react-loader-spinner";
 import {
   ChatBubbleOvalLeftEllipsisIcon,
   PaperAirplaneIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { ChatBubbleOvalLeftIcon, CheckBadgeIcon, ChevronDownIcon, HandThumbUpIcon, PauseIcon, PlayIcon } from "@heroicons/react/24/solid";
+import { ChatBubbleOvalLeftIcon, CheckBadgeIcon, CheckCircleIcon, ChevronDownIcon, HandThumbUpIcon, PauseIcon, PlayIcon, UserIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { EyeIcon, FireIcon } from "@heroicons/react/24/solid";
 import { AuthContext, AuthUserContext, AuthUserFollowsContext } from "~~/app/context";
 import { Avatar } from "~~/components/Avatar";
@@ -752,6 +752,89 @@ const Video: NextPage = () => {
                   <Snippet color="primary">{`sprq.social/${posterProfile.username}`}</Snippet>
                 </div>
 
+              </div>
+              <div className="stats shadow flex flex-col lg:w-[350px] py-5 ml-0 lg:ml-2">
+                <div className="stat cursor-pointer hover:opacity-85 py-2" onClick={() => setKinsModalOpen(true)}>
+                  <div className="stat-figure text-primary">
+                    <UserIcon width={30} />
+                  </div>
+                  <div className="stat-title">Kins</div>
+                  <div className="stat-value text-primary text-2xl">
+                    <FormatNumber
+                      number={
+                        tempFollow ? followers?.length + following.length + 1 : followers?.length + following.length
+                      }
+                    />
+                  </div>
+                  <div className="stat-desc">See kins</div>
+                </div>
+                <div className="px-5 my-2">
+                  {isAuthenticated == false && (
+                    <Link href="/login" className="btn bg-base-200 w-full relative text-content-200">
+                      Connect
+                      <UserPlusIcon width={23} className="absolute right-3 opacity-65" />
+                    </Link>
+                  )}
+                  {isAuthenticated == true && (
+                    <div className="btn bg-base-200 w-full relative" onClick={() => handleConnect()}>
+                      {!tempFollow ? (
+                        <>
+                          {followed == true && (
+                            <>
+                              <span>Connected</span>
+                              <CheckCircleIcon width={23} className="absolute right-3 opacity-65" />
+                            </>
+                          )}
+                          {followed == false && (
+                            <>
+                              <span>Connect</span>
+                              <UserPlusIcon width={23} className="absolute right-3 opacity-65" />
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <span>Connected</span>
+                          <CheckCircleIcon width={23} className="absolute right-3 opacity-65" />
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+                <div className="px-5">
+                  {isAuthenticated == true && (
+                    <div className="btn btn-secondary w-full" onClick={() => setTipModalOpen(true)}>
+                      Send Love
+                      <div className="">
+                        <Hearts
+                          height="40"
+                          width="40"
+                          color="#fff"
+                          ariaLabel="hearts-loading"
+                          wrapperStyle={{}}
+                          wrapperClass=""
+                          visible={true}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {isAuthenticated == false && (
+                    <Link href="/login" className="btn btn-secondary w-full text-content-200">
+                      Send Love
+                      <div className="">
+                        <Hearts
+                          height="40"
+                          width="40"
+                          color="#fff"
+                          ariaLabel="hearts-loading"
+                          wrapperStyle={{}}
+                          wrapperClass=""
+                          visible={true}
+                        />
+                      </div>
+                    </Link>
+                  )}
+                </div>
               </div>
               <div className="stats shadow flex flex-col lg:w-[350px] py-5 ml-0 lg:ml-2 h-fit">
                 <Link href="https://www.livepeer.org/" target="_blank" className="self-center">
