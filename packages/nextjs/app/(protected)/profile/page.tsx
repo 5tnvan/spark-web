@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { NextPage } from "next";
 import { CheckCircleIcon, CircleStackIcon, EllipsisVerticalIcon, UserIcon } from "@heroicons/react/24/outline";
-import { ArrowDownCircleIcon, ChatBubbleOvalLeftEllipsisIcon, CheckBadgeIcon, EyeIcon, FireIcon, PaperAirplaneIcon, PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
+import { ArrowDownCircleIcon, ChatBubbleOvalLeftEllipsisIcon, CheckBadgeIcon, EyeIcon, FireIcon, PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { AuthContext, AuthUserContext, AuthUserFollowsContext } from "~~/app/context";
 import AvatarModal from "~~/components/wildfire/AvatarModal";
 import FormatNumber from "~~/components/wildfire/FormatNumber";
@@ -28,7 +28,6 @@ import { updateIdeaArchived } from "~~/utils/wildfire/crud/idea";
 import { updateShortArchived } from "~~/utils/wildfire/crud/3sec";
 import { Card, CardBody, CardFooter, CardHeader, Code, Divider, Link, Snippet } from "@nextui-org/react";
 import { calculateComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
-import ShareSparkModal from "~~/components/wildfire/ShareSparkModal";
 
 const Profile: NextPage = () => {
   const ethPrice = useGlobalState(state => state.nativeCurrency.price);
