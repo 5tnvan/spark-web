@@ -17,7 +17,6 @@ import { Bars } from "react-loader-spinner";
 import { useKins } from "~~/hooks/wildfire/useKins";
 import { Card, CardBody, CardFooter, CardHeader, Chip, Code, Divider, Link } from "@nextui-org/react";
 import { calculateComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
-import ArrowDownFetchMore from "~~/components/wildfire/ArrowDownFetchMore";
 
 const Home: NextPage = () => {
   const router = useRouter();

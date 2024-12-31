@@ -15,13 +15,10 @@ import * as Player from "@livepeer/react/player";
 import { Livepeer } from "livepeer";
 import { NextPage } from "next";
 import ConfettiExplosion from "react-confetti-explosion";
-import { Hearts, RotatingSquare } from "react-loader-spinner";
+import { RotatingSquare } from "react-loader-spinner";
 import {
   ChatBubbleOvalLeftEllipsisIcon,
-  CheckCircleIcon,
   PaperAirplaneIcon,
-  UserIcon,
-  UserPlusIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { ChatBubbleOvalLeftIcon, CheckBadgeIcon, ChevronDownIcon, HandThumbUpIcon, PauseIcon, PlayIcon } from "@heroicons/react/24/solid";
