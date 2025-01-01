@@ -65,7 +65,7 @@ export const Search = () => {
         </div>
       )}
       {!isSearchLoading && searchRes && searchRes.length > 0 && (
-        <div ref={searchRef} className="bg-base-200 rounded-lg p-4 mt-2 absolute top-11 w-full z-10">
+        <div ref={searchRef} className="bg-base-200 rounded-lg p-4 mt-2 absolute top-11 w-full z-30">
           <div className="flex flex-col gap-2">
             {searchRes.map((searchProfile: any) => (
               <Link
