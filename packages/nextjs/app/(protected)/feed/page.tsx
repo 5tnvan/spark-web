@@ -14,7 +14,7 @@ import { TimeAgo } from "~~/components/wildfire/TimeAgo";
 import { useUserFollowingSparksFeed } from "~~/hooks/wildfire/useUserFollowingSparksFeed";
 import React from "react";
 import { Card, CardBody, CardFooter, CardHeader, Divider, Link } from "@nextui-org/react";
-import { calculateComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
+import { calculateIdeaComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
 
 const Feed: NextPage = () => {
 
@@ -109,7 +109,7 @@ const Feed: NextPage = () => {
                       </Link>
                       <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
                         <ChatBubbleOvalLeftEllipsisIcon width={18} height={18} />
-                        <FormatNumber number={calculateComments(idea.idea_comments)} />
+                        <FormatNumber number={calculateIdeaComments(idea.idea_comments)} />
                       </Link>
                     </div>
                     <Link color="foreground" showAnchorIcon href={`/spark/${idea.id}`} className="text-sm text-blue-500">

@@ -25,7 +25,7 @@ import { convertEthToUsd } from "~~/utils/wildfire/convertEthToUsd";
 import { deleteFollow, insertFollow } from "~~/utils/wildfire/crud/followers";
 import { Avatar } from "~~/components/Avatar";
 import { Card, CardBody, CardFooter, CardHeader, Divider, Link, Snippet } from "@nextui-org/react";
-import { calculateComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
+import { calculateIdeaComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
 
 const Profile: NextPage = () => {
   const { username } = useParams();
@@ -218,7 +218,7 @@ const Profile: NextPage = () => {
                         </Link>
                         <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
                           <ChatBubbleOvalLeftEllipsisIcon width={18} height={18} />
-                          <FormatNumber number={calculateComments(idea.idea_comments)} />
+                          <FormatNumber number={calculateIdeaComments(idea.idea_comments)} />
                         </Link>
                       </div>
                       <Link color="foreground" showAnchorIcon href={`/spark/${idea.id}`} className="text-sm text-blue-500">

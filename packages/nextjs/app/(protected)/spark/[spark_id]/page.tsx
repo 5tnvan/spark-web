@@ -32,7 +32,7 @@ import ShareSparkModal from "~~/components/wildfire/ShareSparkModal";
 import { TimeAgo } from "~~/components/wildfire/TimeAgo";
 import TipModal from "~~/components/wildfire/TipModal";
 import { useIdea } from "~~/hooks/wildfire/useIdea";
-import { calculateComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
+import { calculateIdeaComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
 import { insertFollow } from "~~/utils/wildfire/crud/followers";
 import { insertComment } from "~~/utils/wildfire/crud/idea_comments";
 import { insertLike } from "~~/utils/wildfire/crud/idea_fires";
@@ -59,6 +59,8 @@ const Video: NextPage = () => {
   const [isExplodingSpark, setIsExplodingSpark] = useState(false);
   const [isExplodingFire, setIsExplodingFire] = useState(false);
   const [isExplodingSupernova, setIsExplodingSupernova] = useState(false);
+
+  console.log("idea", idea);
 
   //CONSUME PROVIDERS
   const { isAuthenticated, user } = useContext(AuthContext);
@@ -308,7 +310,7 @@ const Video: NextPage = () => {
                         </span>
                         <span className="flex flex-row items-center gap-1 text-sm">
                           <ChatBubbleOvalLeftEllipsisIcon width={18} height={18} />
-                          <FormatNumber number={calculateComments(idea.idea_comments)} />
+                          <FormatNumber number={calculateIdeaComments(idea.idea_comments)} />
                         </span>
                         <button className="flex flex-row items-center gap-1 text-sm text-blue-500 hover:text-blue-600" onClick={() => setShareModalOpen(true)}>
                           <PaperAirplaneIcon width={18} height={18} />
@@ -569,7 +571,7 @@ const Video: NextPage = () => {
           </div>
         )}
 
-        <div className="idea flex flex-col gap-2">
+        <div className="idea flex flex-col gap-2 h-fit">
           {loadingIdea &&
             <div>
               <RotatingSquare
@@ -728,7 +730,7 @@ const Video: NextPage = () => {
 
                   <div className="stat-title">Discussion</div>
                   <div className="stat-value text-primary text-2xl">
-                    <FormatNumber number={calculateComments(idea.idea_comments)} />
+                    <FormatNumber number={calculateIdeaComments(idea.idea_comments)} />
                   </div>
                 </div>
                 <div className="px-5 my-2" onClick={() => setShareModalOpen(true)}>

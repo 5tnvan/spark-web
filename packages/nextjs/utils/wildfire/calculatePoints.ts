@@ -12,7 +12,7 @@ export const calculatePoints = (longFormFires: Array<any>): number => {
   }, 0);
 };
 
-export const calculateComments = (longFormComments: any) => {
+export const calculateLongFormComments = (longFormComments: any) => {
   let totalComments = 0;
 
   if (longFormComments && Array.isArray(longFormComments)) {
@@ -29,3 +29,24 @@ export const calculateComments = (longFormComments: any) => {
 
   return totalComments;
 };
+
+export const calculateIdeaComments = (ideaComments: any) => {
+
+  console.log("ideaComments", ideaComments);
+  let totalComments = 0;
+
+  if (ideaComments && Array.isArray(ideaComments)) {
+    ideaComments.forEach(comment => {
+      // Count the main comment
+      totalComments++;
+
+      // Count all replies to the comment
+      if (comment.idea_replies && Array.isArray(comment.idea_replies)) {
+        totalComments += comment.idea_replies.length;
+      }
+    });
+  }
+
+  return totalComments;
+};
+

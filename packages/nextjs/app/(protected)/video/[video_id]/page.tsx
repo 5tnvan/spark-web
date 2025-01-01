@@ -32,7 +32,7 @@ import ShareVideoModal from "~~/components/wildfire/ShareVideoModal";
 import { TimeAgo } from "~~/components/wildfire/TimeAgo";
 import TipModal from "~~/components/wildfire/TipModal";
 import { useVideo } from "~~/hooks/wildfire/useVideo";
-import { calculateComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
+import { calculateLongFormComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
 import { insertFollow } from "~~/utils/wildfire/crud/followers";
 import { insertComment } from "~~/utils/wildfire/crud/long_form_comments";
 import { insertLike } from "~~/utils/wildfire/crud/long_form_fires";
@@ -703,7 +703,7 @@ const Video: NextPage = () => {
           </div>
         )}
 
-        <div className="long_form flex flex-col gap-2">
+        <div className="h-fit long_form flex flex-col gap-2">
           {loadingVideo &&
             <div>
               <RotatingSquare
@@ -873,7 +873,7 @@ const Video: NextPage = () => {
 
                   <div className="stat-title">Discussion</div>
                   <div className="stat-value text-primary text-2xl">
-                    <FormatNumber number={calculateComments(video.long_form_comments)} />
+                    <FormatNumber number={calculateLongFormComments(video.long_form_comments)} />
                   </div>
                 </div>
                 <div className="px-5 my-2" onClick={() => setShareModalOpen(true)}>

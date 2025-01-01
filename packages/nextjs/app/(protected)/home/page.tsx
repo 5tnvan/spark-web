@@ -16,13 +16,15 @@ import { useShortsFeed } from "~~/hooks/wildfire/useShortsFeed";
 import { Bars } from "react-loader-spinner";
 import { useKins } from "~~/hooks/wildfire/useKins";
 import { Card, CardBody, CardFooter, CardHeader, Chip, Code, Divider, Link } from "@nextui-org/react";
-import { calculateComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
+import { calculateIdeaComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
 
 const Home: NextPage = () => {
   const router = useRouter();
   //const [toast, setToast] = useState<any>(null);
   const tabs: Array<"sparks" | "videos" | "shorts"> = ["sparks", "videos", "shorts"];
   const [activeTab, setActiveTab] = useState<"sparks" | "videos" | "shorts">("sparks");
+
+  
 
   useEffect(() => {
     const getRandomTab = () => {
@@ -40,6 +42,8 @@ const Home: NextPage = () => {
   const { loading: loadingVideoFeed2, feed: videosFeed2, refetch: refetchVideos2 } = useVideosFeed("mostViewed", 3, 3);
   const { loading: loadingShortsFeed, feed: shortsFeed, fetchMore: fetchMoreShorts } = useShortsFeed("default", 6);
   const { loading: loadingIdeaFeed, feed: ideasFeed, fetchMore: fetchMoreIdeas } = useIdeasFeed("random", 6, 6);
+
+  console.log("ideasFeed", ideasFeed);
 
   const formatText = (text: string) => {
     return text.split("\n").map((line, i) => (
@@ -124,7 +128,7 @@ const Home: NextPage = () => {
                         </Link>
                         <Link color="foreground" href={`/spark/${idea.id}`} className="flex flex-row items-center gap-1 text-sm">
                           <ChatBubbleOvalLeftEllipsisIcon width={18} height={18} />
-                          <FormatNumber number={calculateComments(idea.idea_comments)} />
+                          <FormatNumber number={calculateIdeaComments(idea.idea_comments)} />
                         </Link>
                       </div>
                       <Link color="foreground" showAnchorIcon href={`/spark/${idea.id}`} className="text-sm text-blue-500">
