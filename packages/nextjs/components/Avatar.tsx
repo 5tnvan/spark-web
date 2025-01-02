@@ -21,7 +21,7 @@ export const Avatar = ({ profile, width, height }: Props) => {
           <Image
             alt="img"
             src={profile.avatar_url}
-            className="avatar-img rounded-full bg-cover"
+            className="avatar-img rounded-full object-cover w-full h-full"
             width={100}
             height={100}
             unoptimized

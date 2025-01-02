@@ -28,6 +28,7 @@ import { updateIdeaArchived } from "~~/utils/wildfire/crud/idea";
 import { updateShortArchived } from "~~/utils/wildfire/crud/3sec";
 import { Card, CardBody, CardFooter, CardHeader, Code, Divider, Link, Snippet } from "@nextui-org/react";
 import { calculateIdeaComments, calculatePoints } from "~~/utils/wildfire/calculatePoints";
+import BioModal from "~~/components/wildfire/BioModal";
 
 const Profile: NextPage = () => {
   const ethPrice = useGlobalState(state => state.nativeCurrency.price);
@@ -145,11 +146,18 @@ const Profile: NextPage = () => {
     setAvatarModalOpen(false);
   };
 
-  //AVATAR MODAL
+  //USERNAME MODAL
   const [isUsernameModalOpen, setUsernameModalOpen] = useState(false);
 
   const closeUsernameModal = () => {
     setUsernameModalOpen(false);
+  };
+
+  // BIO MODAL
+  const [isBioModalOpen, setBioModalOpen] = useState(false);
+
+  const closeBioModal = () => {
+    setBioModalOpen(false);
   };
 
   // Helper function to format text with hashtags and mentions
@@ -471,6 +479,7 @@ const Profile: NextPage = () => {
       )}
       {isAvatarModalOpen && <AvatarModal onClose={closeAvatarModal} />}
       {isUsernameModalOpen && <UsernameModal onClose={closeUsernameModal} />}
+      {isBioModalOpen && <BioModal onClose={closeBioModal} />}
       {/* CONTENT */}
       <div className="content m-2 mt-0">
         {/* PROFILE */}
@@ -535,24 +544,23 @@ const Profile: NextPage = () => {
                 <div className="text-secondary">
                   {posterProfile?.avatar_url && (
                   <div className="relative avatar">
-                    <div className="absolute w-[10px] h-[10px] top-1 right-0 bg-green-500 rounded-full"></div>
-                    <div className=" w-12 rounded-full">
-                      <Image
-                        src={posterProfile?.avatar_url}
-                        width={60}
-                        height={60}
-                        alt="linear demo image"
-                        className=""
-                        style={{ width: "auto", height: "auto" }}
-                      />
-                    </div>
-                    <div
-                      className="absolute bottom-0 rounded-full bg-white p-1 right-0"
-                      onClick={() => setAvatarModalOpen(true)}
-                    >
-                      <PencilIcon width={12} color="black" />
-                    </div>
+                  <div className="absolute w-[10px] h-[10px] top-1 right-0 bg-green-500 rounded-full"></div>
+                  <div className="w-12 h-12 rounded-full overflow-hidden">
+                    <Image
+                      src={posterProfile?.avatar_url}
+                      width={60}
+                      height={60}
+                      alt="linear demo image"
+                      className="object-cover w-full h-full"
+                    />
                   </div>
+                  <div
+                    className="absolute bottom-0 rounded-full bg-white p-1 right-0"
+                    onClick={() => setAvatarModalOpen(true)}
+                  >
+                    <PencilIcon width={12} color="black" />
+                  </div>
+                </div>                
                   )}
                   {!posterProfile?.avatar_url && (
                     <div className="avatar placeholder">
@@ -570,10 +578,21 @@ const Profile: NextPage = () => {
                 </div>
               </div>
               <div className="flex flex-col items-start w-full px-6">
+              <div className="flex flex-row justify-center items-center">
                 {posterProfile?.bio && <div className="text-sm font-normal opacity-80 mb-2 ">
-                    {posterProfile.bio}
+                  {posterProfile.bio}
+                </div>}
+                {posterProfile?.bio ?
+                  <div className="stat-desc cursor-pointer text-neutral-600 ml-2 mb-2" onClick={() => setBioModalOpen(true)}>
+                    <PencilIcon width={10} height={10} />
+                  </div> :
+                  <div className="stat-desc cursor-pointer text-neutral-600 flex flex-row justify-center items-center gap-1 text-xs mb-2" onClick={() => setBioModalOpen(true)}>
+                    Add bio
+                    <PencilIcon width={10} height={10} />
                   </div>}
+              </div>
                 <Snippet color="primary">{`sprq.social/${posterProfile?.username}`}</Snippet>
+                
               </div>
               
             </div>
