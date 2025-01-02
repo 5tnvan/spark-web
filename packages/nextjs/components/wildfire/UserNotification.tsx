@@ -10,17 +10,36 @@ import { useNotifications } from "~~/hooks/wildfire/useNotifications";
 import { useGlobalState } from "~~/services/store/store";
 import { convertEthToUsd } from "~~/utils/wildfire/convertEthToUsd";
 import {
-  updateCommentRead,
   updateDirectTipRead,
-  updateFireRead,
   updateFollowerRead,
-  updateReplyRead,
-  updateTipRead,
+  updateIdeaCommentRead,
+  updateIdeaFireRead,
+  updateIdeaReplyRead,
+  updateLongFormCommentRead,
+  updateLongFormFireRead,
+  updateLongFormReplyRead,
+  updateShortCommentRead,
+  updateShortFireRead,
+  updateShortReplyRead,
+  updateShortTipRead,
 } from "~~/utils/wildfire/crud/notifications";
 
 export const Notification = () => {
-  const { followersNotifications, shortFiresNotifications, shortCommentsNotifications, shortRepliesNotifications, shortTipsNotifications, directTipsNotifications, refetch } =
-    useNotifications();
+  const { 
+    followersNotifications, 
+    shortFiresNotifications, 
+    shortCommentsNotifications, 
+    shortRepliesNotifications, 
+    longFormFiresNotifications, 
+    longFormCommentsNotifications, 
+    longFormRepliesNotifications,
+    ideaFiresNotifications,
+    ideaCommentsNotifications,
+    ideaRepliesNotifications, 
+    shortTipsNotifications, 
+    directTipsNotifications, 
+    refetch } =
+    useNotifications(10);
   const ethPrice = useGlobalState(state => state.nativeCurrency.price);
   const fusePrice = useGlobalState(state => state.fuseCurrency.price);
 
@@ -45,6 +64,36 @@ export const Notification = () => {
     ...(shortRepliesNotifications ?? []).map((notif: any) => ({
       ...notif,
       type: "short_reply",
+      isUnread: !notif.read,
+    })),
+    ...(longFormFiresNotifications ?? []).map((notif: any) => ({
+      ...notif,
+      type: "longform_like",
+      isUnread: !notif.read,
+    })),
+    ...(longFormCommentsNotifications ?? []).map((notif: any) => ({
+      ...notif,
+      type: "longform_comment",
+      isUnread: !notif.read,
+    })),
+    ...(longFormRepliesNotifications ?? []).map((notif: any) => ({
+      ...notif,
+      type: "longform_reply",
+      isUnread: !notif.read,
+    })),
+    ...(ideaFiresNotifications ?? []).map((notif: any) => ({
+      ...notif,
+      type: "idea_like",
+      isUnread: !notif.read,
+    })),
+    ...(ideaCommentsNotifications ?? []).map((notif: any) => ({
+      ...notif,
+      type: "idea_comment",
+      isUnread: !notif.read,
+    })),
+    ...(ideaRepliesNotifications ?? []).map((notif: any) => ({
+      ...notif,
+      type: "idea_reply",
       isUnread: !notif.read,
     })),
     ...(shortTipsNotifications ?? []).map((notif: any) => ({
@@ -74,36 +123,56 @@ export const Notification = () => {
   };
   useOutsideClick(dropdownRef, closeDropdown);
 
-  // Update read status and refetch notifications
-  const handleNotificationClick = async (notif: any) => {
-    closeDropdown();
-
-    if (notif.isUnread) {
-      switch (notif.type) {
-        case "follow":
-          await updateFollowerRead(notif.id);
-          break;
-        case "short_like":
-          await updateFireRead(notif.id);
-          break;
-        case "short_comment":
-          await updateCommentRead(notif.id);
-          break;
-        case "short_reply":
-          await updateReplyRead(notif.id);
-          break;
-        case "short_tip":
-          await updateTipRead(notif.id);
-          break;
+  // Handle notification click
+    const handleNotificationClick = async (notif: any) => {
+      // Check if the notification is unread
+      if (notif.isUnread) {
+        switch (notif.type) {
+          case "follow":
+            await updateFollowerRead(notif.id);
+            break;
+          case "short_like":
+            await updateShortFireRead(notif.id);
+            break;
+          case "short_comment":
+            await updateShortCommentRead(notif.id);
+            break;
+          case "short_reply":
+            await updateShortReplyRead(notif.id);
+            break;
+          case "short_tip":
+            await updateShortTipRead(notif.id);
+            break;
           case "direct_tip":
             await updateDirectTipRead(notif.id);
             break;
-        default:
-          break;
+          case "long_like":
+            await updateLongFormFireRead(notif.id);
+            break;
+          case "long_comment":
+            await updateLongFormCommentRead(notif.id);
+            break;
+          case "long_reply":
+            await updateLongFormReplyRead(notif.id);
+            break;
+          case "idea_like":
+            await updateIdeaFireRead(notif.id);
+            break;
+          case "idea_comment":
+            await updateIdeaCommentRead(notif.id);
+            break;
+          case "idea_reply":
+            await updateIdeaReplyRead(notif.id);
+            break;
+          default:
+            break;
+        }
+  
+        // Refetch notifications after updating read status
+        refetch();
+        closeDropdown();
       }
-      refetch();
-    }
-  };
+    };
 
   return (
     <>
@@ -192,7 +261,117 @@ export const Notification = () => {
                     </div>
                   </Link>
                 );
-              } else if (notif.type === "short_tip") {
+              } else if (notif.type === "longform_like") {
+                message = (
+                  <Link
+                    href={"/video/" + notif.post_id}
+                    onClick={() => handleNotificationClick(notif)}
+                    className={`flex items-center p-2 mb-1 rounded-md ${notif.isUnread && "bg-base-200"}`}
+                  >
+                    <div className="flex flex-row justify-between w-full items-center">
+                      <div className="flex flex-row gap-1 items-center">
+                        <Avatar profile={notif.liker} width={6} height={6} />
+                        <span className="font-semibold">{notif.liker.username}</span> liked your video.
+                      </div>
+                      <div className="text-xs opacity-75">
+                        <TimeAgo timestamp={notif.created_at} />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              } else if (notif.type === "longform_comment") {
+                message = (
+                  <Link
+                    href={"/video/" + notif.post_id}
+                    onClick={() => handleNotificationClick(notif)}
+                    className={`flex items-center p-2 mb-1 rounded-md ${notif.isUnread && "bg-base-200"}`}
+                  >
+                    <div className="flex flex-row justify-between w-full items-center">
+                      <div className="flex flex-row gap-1 items-center">
+                        <Avatar profile={notif.commenter} width={6} height={6} />
+                        <span className="font-semibold">{notif.commenter.username}</span> commented on your video.
+                      </div>
+                      <div className="text-xs opacity-75">
+                        <TimeAgo timestamp={notif.created_at} />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              } else if (notif.type === "longform_reply") {
+                message = (
+                  <Link
+                    href={"/video/" + notif.post_id}
+                    onClick={() => handleNotificationClick(notif)}
+                    className={`flex items-center p-2 rounded-md ${notif.isUnread && "bg-base-200"}`}
+                  >
+                    <div className="flex flex-row justify-between w-full items-center">
+                      <div className="flex flex-row gap-1 items-center">
+                        <Avatar profile={notif.replier} width={6} height={6} />
+                        <span className="font-semibold">{notif.replier.username}</span> replied to you on a video.
+                      </div>
+                      <div className="text-xs opacity-75">
+                        <TimeAgo timestamp={notif.created_at} />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              }
+              else if (notif.type === "idea_like") {
+                message = (
+                  <Link
+                    href={"/spark/" + notif.post_id}
+                    onClick={() => handleNotificationClick(notif)}
+                    className={`flex items-center p-4 rounded-md ${notif.isUnread && "bg-base-200"}`}
+                  >
+                    <div className="flex flex-row justify-between w-full items-center">
+                      <div className="flex flex-row gap-1 items-center">
+                        <Avatar profile={notif.liker} width={6} height={6} />
+                        <span className="font-semibold">{notif.liker.username}</span> liked your spark.
+                      </div>
+                      <div className="text-xs opacity-75">
+                        <TimeAgo timestamp={notif.created_at} />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              } else if (notif.type === "idea_comment") {
+                message = (
+                  <Link
+                    href={"/spark/" + notif.post_id}
+                    onClick={() => handleNotificationClick(notif)}
+                    className={`flex items-center p-4 rounded-md ${notif.isUnread && "bg-base-200"}`}
+                  >
+                    <div className="flex flex-row justify-between w-full items-center">
+                      <div className="flex flex-row gap-1 items-center">
+                        <Avatar profile={notif.commenter} width={6} height={6} />
+                        <span className="font-semibold">{notif.commenter.username}</span> commented on your spark.
+                      </div>
+                      <div className="text-xs opacity-75">
+                        <TimeAgo timestamp={notif.created_at} />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              } else if (notif.type === "idea_reply") {
+                message = (
+                  <Link
+                    href={"/spark/" + notif.post_id}
+                    onClick={() => handleNotificationClick(notif)}
+                    className={`flex items-center p-4 rounded-md ${notif.isUnread && "bg-base-200"}`}
+                  >
+                    <div className="flex flex-row justify-between w-full items-center">
+                      <div className="flex flex-row gap-1 items-center">
+                        <Avatar profile={notif.replier} width={6} height={6} />
+                        <span className="font-semibold">{notif.replier.username}</span> replied to your spark.
+                      </div>
+                      <div className="text-xs opacity-75">
+                        <TimeAgo timestamp={notif.created_at} />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              }
+              else if (notif.type === "short_tip") {
                 message = (
                   <Link
                     href={"/v/" + notif["3sec_tips"].video_id}
