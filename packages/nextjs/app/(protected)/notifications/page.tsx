@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { Avatar } from "~~/components/Avatar";
@@ -158,7 +158,7 @@ const Notifications: NextPage = () => {
 
   // Clear All Notifications function
   const clearAllNotifications = async () => {
-    for (let notif of allNotifications) {
+    for (const notif of allNotifications) {
       switch (notif.type) {
         case "follow":
           await updateFollowerRead(notif.id);
